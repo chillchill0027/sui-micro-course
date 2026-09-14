@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>隋朝统一与灭亡 · 课堂教学</title>
+<style>
+:root {
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --sub: #86868b;
+  --blue: #0071e3;
+  --bg: #ffffff;
+  --bg-soft: #f5f5f7;
+  --bg-dark: #000000;
+  --bg-dark-soft: #1d1d1f;
+  --line: #d2d2d7;
+  --radius: 20px;
+  --nav-h: 52px;
+  --max: 980px;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro SC", "SF Pro Text", "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+img { max-width: 100%; display: block; }
+
+/* —— localnav —— */
+.localnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: rgba(255,255,255,0.72);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.localnav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-x: auto;
+}
+.localnav .brand {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--ink);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.localnav .links {
+  display: flex;
+  gap: 18px;
+  font-size: 12px;
+  color: var(--muted);
+  flex: 1;
+  justify-content: flex-end;
+}
+.localnav .links a {
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+}
+.localnav .links a:hover,
+.localnav .links a.active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+.localnav .cta {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--blue);
+  text-decoration: none;
+  font-weight: 400;
+}
+
+/* progress */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--blue);
+  z-index: 200;
+  width: 0%;
+  transition: width .15s linear;
+}
+
+/* —— hero —— */
+.hero {
+  position: relative;
+  min-height: calc(100vh - var(--nav-h));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px 60px;
+  background: #000;
+  color: #f5f5f7;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url("assets/hero-sui-capital.png") center/cover no-repeat;
+  opacity: 0.55;
+  transform: scale(1.02);
+}
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 40%, rgba(0,0,0,.7) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 820px;
+}
+.hero-eyebrow {
+  font-size: 17px;
+  color: #f5f5f7;
+  opacity: .92;
+  margin: 0 0 12px;
+  letter-spacing: .01em;
+}
+.hero h1 {
+  font-size: clamp(48px, 8vw, 80px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+.hero .sub {
+  font-size: clamp(19px, 2.4vw, 28px);
+  font-weight: 400;
+  color: #a1a1a6;
+  margin: 0 0 28px;
+  letter-spacing: -0.01em;
+}
+.hero .meta {
+  font-size: 14px;
+  color: #86868b;
+  margin: 0 0 36px;
+}
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 980px;
+  font-size: 17px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-fill {
+  background: #0071e3;
+  color: #fff;
+}
+.btn-fill:hover { background: #0077ED; }
+.btn-ghost {
+  background: transparent;
+  color: #2997ff;
+  border: 1px solid rgba(41,151,255,.4);
+}
+.btn-ghost:hover { border-color: #2997ff; }
+.hero-hint {
+  margin-top: 48px;
+  font-size: 12px;
+  color: #6e6e73;
+}
+
+/* —— sections —— */
+.chapter {
+  padding: 100px 20px;
+}
+.chapter.soft { background: var(--bg-soft); }
+.chapter.dark {
+  background: var(--bg-dark);
+  color: #f5f5f7;
+}
+.chapter.dark .kicker { color: #2997ff; }
+.chapter.dark .lede { color: #a1a1a6; }
+.chapter.dark .card {
+  background: #1d1d1f;
+  color: #f5f5f7;
+}
+.chapter.dark .card .tag { background: rgba(255,255,255,.1); color: #a1a1a6; }
+.chapter.dark .card .tag.book { background: #1d1d1f; color: #2997ff; border: 1px solid rgba(41,151,255,.35); }
+.chapter.dark .card .tag.extend { background: rgba(255,255,255,.12); color: #f5f5f7; }
+.chapter.dark .note { color: #86868b; }
+.chapter.dark .pullquote { border-left-color: #2997ff; color: #f5f5f7; background: rgba(255,255,255,.04); }
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+.kicker {
+  font-size: 17px;
+  color: var(--blue);
+  font-weight: 600;
+  margin: 0 0 10px;
+  letter-spacing: .01em;
+}
+.chapter h2 {
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  margin: 0 0 16px;
+}
+.lede {
+  font-size: clamp(19px, 2vw, 24px);
+  color: var(--muted);
+  font-weight: 400;
+  margin: 0 0 40px;
+  max-width: 40em;
+  letter-spacing: -0.01em;
+}
+.prose {
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--ink);
+  max-width: 40em;
+}
+.chapter.dark .prose { color: #f5f5f7; }
+.prose p { margin: 0 0 1em; }
+.prose strong { font-weight: 600; }
+
+/* time chip */
+.year {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue);
+  background: rgba(0,113,227,.1);
+  padding: 4px 10px;
+  border-radius: 980px;
+  margin-bottom: 14px;
+}
+.chapter.dark .year {
+  color: #2997ff;
+  background: rgba(41,151,255,.12);
+}
+
+/* media */
+.media-frame {
+  margin: 40px 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-soft);
+}
+.media-frame img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+}
+.media-cap {
+  font-size: 14px;
+  color: var(--sub);
+  margin: 12px 0 0;
+  text-align: center;
+}
+.chapter.dark .media-frame { background: #1d1d1f; }
+
+/* cards grid */
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 40px 0;
+}
+.cards.three { grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 800px) {
+  .cards, .cards.three { grid-template-columns: 1fr; }
+}
+.card {
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  padding: 28px 28px 32px;
+}
+.card h3 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  line-height: 1.2;
+}
+.card .body {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.chapter.dark .card .body { color: #f5f5f7; }
+.card .body p { margin: 0 0 .85em; }
+.card .body p:last-child { margin-bottom: 0; }
+.card .tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 980px;
+  margin-bottom: 12px;
+  background: #e8e8ed;
+  color: var(--muted);
+}
+.card .tag.book {
+  background: var(--blue);
+  color: #fff;
+}
+.card .tag.extend {
+  background: #424245;
+  color: #f5f5f7;
+}
+
+.pullquote {
+  margin: 36px 0;
+  padding: 24px 28px;
+  border-left: 3px solid var(--blue);
+  background: var(--bg-soft);
+  border-radius: 0 14px 14px 0;
+  font-size: 21px;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  max-width: 40em;
+}
+.pullquote cite {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-style: normal;
+  color: var(--sub);
+}
+
+.note {
+  font-size: 14px;
+  color: var(--sub);
+  margin-top: 8px;
+}
+
+/* timeline strip */
+.timeline {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 36px 20px 48px;
+  background: var(--bg-soft);
+  -webkit-overflow-scrolling: touch;
+}
+.tl-item {
+  flex: 0 0 auto;
+  min-width: 140px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 16px;
+  text-decoration: none;
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  transition: transform .2s, box-shadow .2s;
+}
+.tl-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+.tl-item .y {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+.tl-item .t {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+/* split layout */
+.split {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+}
+.split .media-frame { margin: 0; }
+
+/* board (黑板式讨论) */
+.board {
+  background: #1d1d1f;
+  color: #f5f5f7;
+  border-radius: var(--radius);
+  padding: 40px 44px;
+}
+.board h3 {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 20px;
+  letter-spacing: -0.02em;
+}
+.board ol {
+  margin: 0;
+  padding-left: 1.3em;
+  font-size: 18px;
+  line-height: 1.7;
+}
+.board ol li { margin-bottom: 12px; }
+.board .hint {
+  margin-top: 24px;
+  font-size: 14px;
+  color: #86868b;
+}
+
+/* footer */
+footer {
+  padding: 40px 20px 60px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--sub);
+  background: var(--bg-soft);
+}
+footer a { color: var(--blue); text-decoration: none; }
+
+/* key hint toast */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(29,29,31,.92);
+  color: #f5f5f7;
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 980px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s, transform .3s;
+  z-index: 300;
+  backdrop-filter: blur(10px);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* nav buttons fixed */
+.flip {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  gap: 8px;
+  z-index: 90;
+}
+.flip button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 2px 12px rgba(0,0,0,.12);
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--ink);
+  backdrop-filter: blur(10px);
+}
+.flip button:hover { background: #fff; }
+
+/* skip link */
+.sr {
+  position: absolute;
+  left: -9999px;
+}
+.sr:focus {
+  left: 16px; top: 16px;
+  background: #fff;
+  padding: 8px 12px;
+  z-index: 400;
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<a class="sr" href="#c1">跳到正文</a>
+
+<nav class="localnav" aria-label="章节导航">
+  <div class="localnav-inner">
+    <a class="brand" href="#top">隋朝 · 第1课</a>
+    <div class="links" id="navLinks">
+      <a href="#c1">统一</a>
+      <a href="#c2">文帝治世</a>
+      <a href="#c3">大运河</a>
+      <a href="#c4">科举</a>
+      <a href="#c5">炀帝时代</a>
+      <a href="#c6">边疆</a>
+      <a href="#c7">速亡</a>
+      <a href="#c8">课堂讨论</a>
+    </div>
+    <a class="cta" href="#c8">讨论题</a>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">人教版《中国历史》七年级下册 · 第一单元</p>
+    <h1>隋朝统一与灭亡</h1>
+    <p class="sub">繁荣与开放的时代 · 开篇课</p>
+    <p class="meta">581 — 618 · 约 38 年 · 时间 × 举措 课堂讲义</p>
+    <div class="hero-actions">
+      <a class="btn btn-fill" href="#c1">开始上课</a>
+      <a class="btn btn-ghost" href="#timeline">时间轴总览</a>
+    </div>
+    <p class="hero-hint">键盘：← → 或空格切换章节 · 数字键 1–8 跳转</p>
+  </div>
+</header>
+
+<!-- ========== TIMELINE ========== -->
+<div class="timeline" id="timeline" aria-label="时间轴">
+  <a class="tl-item" href="#c1"><div class="y">581</div><div class="t">杨坚代周建隋</div></a>
+  <a class="tl-item" href="#c1"><div class="y">589</div><div class="t">灭陈，统一全国</div></a>
+  <a class="tl-item" href="#c2"><div class="y">581–604</div><div class="t">开皇之治</div></a>
+  <a class="tl-item" href="#c3"><div class="y">605 起</div><div class="t">开凿大运河</div></a>
+  <a class="tl-item" href="#c4"><div class="y">605 左右</div><div class="t">设进士科</div></a>
+  <a class="tl-item" href="#c6"><div class="y">610</div><div class="t">经略流求</div></a>
+  <a class="tl-item" href="#c6"><div class="y">612–614</div><div class="t">三征辽东</div></a>
+  <a class="tl-item" href="#c6"><div class="y">615</div><div class="t">雁门之围</div></a>
+  <a class="tl-item" href="#c7"><div class="y">618</div><div class="t">隋炀帝被杀，隋亡</div></a>
+</div>
+
+<!-- ========== C1 统一 ========== -->
+<section class="chapter" id="c1" data-chapter="1">
+  <div class="wrap">
+    <p class="kicker">第一幕 · 再度统一</p>
+    <h2>三百年分裂后的<br />再一次一统</h2>
+    <p class="lede">北周末年，外戚杨坚执掌朝政。581 年，他夺取北周政权建立隋朝；八年后渡江灭陈，把分裂近三百年的中国重新捏成一块。</p>
+
+    <div class="split">
+      <div>
+        <div class="year">581 · 583 · 589</div>
+        <div class="prose">
+          <p><strong>建隋。</strong>北周末年，外戚杨坚执掌朝政。581 年，杨坚夺取北周政权，建立隋朝，仍以长安为都，是为隋文帝。建立隋朝两年后，迁都大兴城，是为京师。</p>
+          <p><strong>灭陈。</strong>当时南方陈朝的最后一个皇帝陈后主不问政事，沉迷享乐。589 年，隋军渡过长江，灭掉陈朝，统一全国。</p>
+          <p><strong>意义。</strong>隋的统一，结束了长期分裂局面，顺应了民族交融的大趋势，进一步促进了南北方经济、文化的交流和发展。这是继秦、西晋之后，又一次全国性大统一——为后来的大运河、科举、律令推行提供了统一的政令场域。</p>
+        </div>
+      </div>
+      <div class="media-frame">
+        <img src="assets/hero-sui-capital.png" alt="隋代京师大兴城想象图，宫城与水面" width="1536" height="1024" />
+      </div>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <span class="tag book">教材</span>
+        <h3>杨坚其人</h3>
+        <div class="body">
+          <p>杨坚出身关陇贵族集团，以外戚身份在北周末年总揽军政。他没有靠大规模血战扫平天下，而是以禅代方式代周建隋，又在南朝陈主昏庸之际完成渡江灭陈。这种「以政略为主、以兵威为辅」的统一路径，使得隋初保留了大量旧朝官僚与制度资源，有利于迅速恢复行政秩序。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>为何能迅速统一</h3>
+        <div class="body">
+          <p>北周已为统一奠基：府兵制强化了军事动员，关陇集团整合了胡汉贵族，灭北齐后北方已基本一体。陈朝则偏安江左、君臣怠政。杨坚接手的是一个「北方已强、南方已弱」的格局，统一成本低于秦汉，但统一后的治理成本极高——如何消化南北差异，才是开皇年间真正的考题。</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== C2 文帝 ========== -->
+<section class="chapter soft" id="c2" data-chapter="2">
+  <div class="wrap">
+    <p class="kicker">第二幕 · 制度奠基</p>
+    <h2>开皇之治：<br />把国家装进制度里</h2>
+    <p class="lede">教材写得很克制：发展经济、编订户籍、减轻赋役、统一度量衡、加强集权、修订刑律。背后是一整套把人口、税负、法典和行政流程「标准化」的国家工程。</p>
+
+    <div class="media-frame">
+      <img src="assets/wendi-court.png" alt="隋文帝朝堂听政想象图" width="1536" height="1024" />
+      <p class="media-cap">隋文帝朝堂：减省刑律、简并机构、核实户口，开皇年间国力迅速恢复</p>
+    </div>
+
+    <div class="prose">
+      <p>隋朝建立后，发展经济，编订户籍，核实户口，减轻百姓赋役负担，统一币制和度量衡；加强中央集权，修订和减省刑律，简化机构，提高行政效率。隋朝经济迅速恢复和发展，人口数量和垦田面积大幅度增长，成为国力强盛的王朝。后世史家常以年号称之为「开皇之治」——教材未用此四字，但用「国力强盛的王朝」表达了同一判断。</p>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <span class="tag book">教材</span>
+        <h3>编户与减负</h3>
+        <div class="body">
+          <p>教材写「编订户籍，核实户口，减轻百姓赋役负担」。编户不是登记身份证那么简单，而是把每一个丁口绑定到均田与课役上：户口清了，税基才稳；税基稳了，才有条件减负。这一组动作是开皇国力的底层操作系统。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>大索貌阅（585）</h3>
+        <div class="body">
+          <p>「大索」是全面清查户口，「貌阅」是当面核对年龄体貌，防止「诈老诈小」逃避赋役。豪强荫庇的人口被重新纳入编户，国家税基显著扩大。它回答的是教材那句「核实户口」里最关键的三个字——<em>怎么核</em>。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>输籍定样</h3>
+        <div class="body">
+          <p>朝廷颁布统一的「输籍」样册，规定各等户的赋役标准并张榜公布。地方官不能随意抬高等级，豪强也难以上下其手。它与大索貌阅配套：一个扩户口，一个定税则。没有定样，中央「减轻赋役」的善意到不了民户。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>开皇律</h3>
+        <div class="body">
+          <p>开皇元年（581）颁《开皇律》，三年修订：条文大幅删减，定型十二篇；刑罚统一为笞、杖、徒、流、死五刑，废除枭首、轘裂等酷刑，死刑须复奏；「十恶」入名例，谋反等不得赦免。《开皇律》是后世《唐律疏议》的直接蓝本——教材「修订和减省刑律」六个字，展开就是一部中国法制史的枢纽。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>三省六部定型</h3>
+        <div class="body">
+          <p>中书（内史）省决策、门下省审议、尚书省执行，下设吏、户、礼、兵、刑、工六部。分工明确，削弱权臣专权空间，提高行政效率——正对应教材「加强中央集权……简化机构，提高行政效率」。唐承隋制，这一架构沿用近三百年。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag book">教材</span>
+        <h3>统一度量衡与币制</h3>
+        <div class="body">
+          <p>统一币制和度量衡，降低交易与财政成本，便利南北经济交流。与全国统一叠加后，跨区域市场才有可能真正运转——这也是后来大运河能发挥「全国物流」功能的前提条件之一。</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="pullquote">
+      文帝遗产：人口增长、仓廪充实、制度成套。  
+      <cite>开皇之治为炀帝提供了可以「挥霍」的国力底座——这正是速亡悲剧的经济学前提。</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ========== C3 运河 ========== -->
+<section class="chapter dark" id="c3" data-chapter="3">
+  <div class="wrap">
+    <p class="kicker">第三幕 · 国家工程</p>
+    <h2>大运河：<br />以洛阳为中心的南北水道</h2>
+    <p class="lede">605 年起，隋炀帝征发几百万人，陆续开凿贯通南北的大运河。它是当时世界上最长的运河，也是后世评价炀帝功过时最纠结的一笔。</p>
+
+    <div class="split">
+      <div>
+        <div class="year">605 起 · 隋炀帝</div>
+        <div class="prose">
+          <p>为了加强南北交通，巩固隋朝对全国的统治，隋炀帝征发几百万人，从 605 年起，陆续开凿了一条贯通南北的大运河。</p>
+          <p><strong>走向与规模。</strong>大运河以洛阳为中心，北抵涿郡，南至余杭，连接了海河、黄河、淮河、长江和钱塘江五大水系，全长 2700 多千米，是当时世界上最长的运河。</p>
+          <p><strong>作用。</strong>大运河的开凿和贯通，带动了沿河城市的繁荣与发展，加强了南北地区政治、经济和文化的交流，有利于国家统一和民族交融。</p>
+          <p><strong>想一想。</strong>我国地势西高东低，主要河流多自西向东流。为什么大运河是南北走向？——因为大一统帝国需要把政治中心（洛阳/关中）与江南粮仓、幽燕防务用水路缝合起来，东西向的天然水道做不到这件事。</p>
+        </div>
+      </div>
+      <div class="media-frame">
+        <img src="assets/canal-sui.png" alt="隋朝大运河漕船想象图" width="1536" height="1024" />
+      </div>
+    </div>
+
+    <div class="cards three">
+      <article class="card">
+        <span class="tag book">教材 · 读图</span>
+        <h3>四段河道</h3>
+        <div class="body">
+          <p>一般记作：<strong>永济渠</strong>（涿郡—洛阳方向）、<strong>通济渠</strong>（洛阳—淮水）、<strong>邗沟</strong>（淮水—江都）、<strong>江南河</strong>（江都—余杭）。教材「读地图」要求指出四段，并找出端点与所连水系。可结合课本地图在黑板上沿「洛阳—涿郡」「洛阳—余杭」两条轴线标注。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>漕运与转漕</h3>
+        <div class="body">
+          <p>「漕」指国家组织的水路粮运。江南粮经运河汇集洛阳，再转输关中，称为转漕。运河不只是观光水道，而是帝国粮食供应链的大动脉——理解了这一点，才能理解教材为何把它写进「巩固统治」而不是「奇观工程」。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag book">教材 · 知识拓展</span>
+        <h3>含嘉仓</h3>
+        <div class="body">
+          <p>含嘉仓是隋唐时期最大的国家粮仓，被誉为「天下第一粮仓」。始建于隋，位于东都洛阳含嘉城内。经考古发掘，遗址面积 40 多万平方米，有数百个粮窖；重点发掘的 160 号粮窖保存约 50 万斤炭化谷粒。大运河开凿后，大量粮食经水路从江南运到洛阳；关中灾荒缺粮时，朝廷可及时调拨，稳定市场。</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="pullquote">
+      「尽道隋亡为此河，至今千里赖通波。若无水殿龙舟事，共禹论功不较多。」
+      <cite>——唐 · 皮日休《汴河怀古》。诗人在承认运河利在千里的同时，把「亡隋」的责任指向龙舟巡游的奢靡，而不是运河本身。</cite>
+    </div>
+
+    <div class="prose">
+      <p><strong>课堂提示：</strong>评价大运河要分两层——①工程本身的长期收益（南北经济文化通道，后世长期依赖）；②实施过程中的民力透支（征发数百万人，与营东都、修长城驰道叠加）。学生若把「功在千秋」与「当时苦民」对立起来，说明还没抓住「短期成本 / 长期收益」的历史分析框架。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== C4 科举 ========== -->
+<section class="chapter" id="c4" data-chapter="4">
+  <div class="wrap">
+    <p class="kicker">第四幕 · 选官革命</p>
+    <h2>科举取士：<br />从门第到才识</h2>
+    <p class="lede">隋文帝废除前朝选官旧制、依才能取士；隋炀帝设进士科，标志着通过考试选拔人才的科举制创立。这是一场改变中国一千三百年社会流动方式的制度革命。</p>
+
+    <div class="split">
+      <div class="media-frame">
+        <img src="assets/keju-sui.png" alt="隋代科举考场想象图，烛光下的号舍" width="1536" height="1024" />
+      </div>
+      <div>
+        <div class="year">开皇 → 大业 · 隋文帝 / 隋炀帝</div>
+        <div class="prose">
+          <p><strong>背景。</strong>魏晋南北朝时期，官员的选拔权由上层权贵掌控，选官看重门第，不太注重才识。世家大族子弟垄断了官场中的中高级职位，平民子弟很难晋升。</p>
+          <p><strong>转折。</strong>隋文帝即位后，废除了前朝的选官制度，依才能取士。隋炀帝时，设置进士科，标志着通过考试选拔人才的科举制创立。</p>
+          <p><strong>意义（教材）。</strong>科举制度是我国古代选官制度的重大变革。它的延续和完善，加强了朝廷在选官上的权力，使通过考试选拔官员的用人制度逐渐确立。它不仅扩大了统治基础，对社会阶层流动也起到积极作用，还显著提高了整个官僚队伍的文化素养。此后，科举制成为历朝选拔官员的主要制度，一直延续了约 1300 年。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>九品中正制为何被废</h3>
+        <div class="body">
+          <p>九品中正制由曹魏确立：中正品评人物为九品，授官以家世、状品为要。运行日久，「上品无寒门，下品无势族」，中央难以真正按才授官。隋统一后需要更直接的国家选才通道，故废前朝选官旧制。这是教材「选官看重门第 → 依才能取士」背后的制度史前史。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>隋唐科举演变线索</h3>
+        <div class="body">
+          <p>隋：文帝分科考试取士 → 炀帝置进士科。唐：科目增多（进士、明经等），程序逐渐严密，成为士人入仕主渠道。宋以后糊名、誊录等使考试更严密。初中阶段只需掌握「隋创立、约 1300 年」；拓展用于建立「察举 → 九品中正 → 科举」的选拔史时间感。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag book">教材 · 课后活动</span>
+        <h3>对当时社会的影响</h3>
+        <div class="body">
+          <p>可从三方面组织答案：①<strong>权力</strong>——选官权收归朝廷，削弱门阀对中高级职位的垄断；②<strong>结构</strong>——扩大统治基础，促进社会阶层流动，使有才学的平民有机会入仕；③<strong>素质</strong>——提高整个官僚队伍的文化素养。此后科举成为历朝主要选官制度，影响长达约 1300 年。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag book">教材</span>
+        <h3>与「统一」的关系</h3>
+        <div class="body">
+          <p>科举不是孤立的人事政策。它与三省六部、开皇律、统一度量衡一样，都是把「人」和「标准」从地方豪强与贵族集团手里收回国家的过程。统一的帝国需要统一的选才标准——这也是为什么科举创立于隋、大盛于唐。</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== C5 炀帝 ========== -->
+<section class="chapter soft" id="c5" data-chapter="5">
+  <div class="wrap">
+    <p class="kicker">第五幕 · 透支</p>
+    <h2>急功近利：<br />大工程与大巡游</h2>
+    <p class="lede">教材用一句话定调：隋炀帝急功近利，不惜民力。接下来是一串令人窒息的动词——营、开、修、巡、征。</p>
+
+    <div class="prose">
+      <p>隋炀帝急功近利，不惜民力，每年都要征发大批劳动力，驱使他们营建东都洛阳、开凿大运河、修筑长城和驰道。他多次巡游，乘坐高大华丽的龙舟，随行船只浩浩荡荡，仅拉纤民工就多达数十万，耗费大量人力和财力。</p>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <span class="tag book">教材</span>
+        <h3>营建东都洛阳</h3>
+        <div class="body">
+          <p>洛阳居天下之中，便于控山东、江南并对接运河，战略上并不荒谬。但营建本身就是巨大民力支出。教材把它写进「不惜民力」的清单，提示学生：评价一项工程，既要看目的是否合理，也要看动员方式是否透支社会。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>三下江南（江都之巡）</h3>
+        <div class="body">
+          <p>大业元年（605）、六年（610）、十二年（616）三次大规模南巡（史家统计口径略有差异，教材统称「多次巡游」）。船队绵延二百余里，挽船民夫、骑兵夹岸而行，沿途州县供顿极繁。最后一次南巡后即滞留江都，618 年在那里被杀——南巡终点成了王朝终点。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag book">教材</span>
+        <h3>长城、驰道与巡游</h3>
+        <div class="body">
+          <p>长城重在北防，驰道改善陆路，龙舟巡游则把运河运力用于夸耀。三者与营东都、开运河同属「全国交通—防务—仪仗工程包」。问题不在单点，而在<strong>叠加</strong>：同一时期多项超大规模动员同时进行，编户丁壮被反复抽离田亩。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>如何给学生讲「代价」</h3>
+        <div class="body">
+          <p>可让学生做一个思想实验：如果只有开运河、没有龙舟与三征辽东，隋会怎样？皮日休的诗已经给出唐人答案——运河可以留下，龙舟才是罪。但历史没有单选题：同一套动员能力，在不同决策下可以是治国工具，也可以是自毁工具。</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== C6 边疆 ========== -->
+<section class="chapter dark" id="c6" data-chapter="6">
+  <div class="wrap">
+    <p class="kicker">第六幕 · 边疆与战争</p>
+    <h2>流求、辽东、雁门</h2>
+    <p class="lede">对外关系有两条线：一条是经略与认识（流求），一条是战争与围困（高句丽、突厥）。前者写入「相关史事」，后者直接压垮了编户社会。</p>
+
+    <div class="cards">
+      <article class="card">
+        <span class="tag book">教材 · 相关史事</span>
+        <h3>经略流求（610）</h3>
+        <div class="body">
+          <p>隋朝称今天的台湾为流求。隋炀帝即位不久，先后三次派人前往流求，其中第三次是在 610 年。隋炀帝派武将文臣率领一万多人，从义安出发，渡海抵达流求，加强了与流求的联系。隋朝对台湾地区的认识比以往前进了一大步。《隋书》中有对流求的专门记载，详细记述了这一地区地理、物产、社会组织、饮食、服饰、习俗等各方面的情况。</p>
+          <p class="note">教学提示：与「征辽东」区分——对流求是加强联系与认识，征辽是战争。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag book">教材</span>
+        <h3>三次征辽东</h3>
+        <div class="body">
+          <p>隋炀帝还三次征辽东，役使大量农民，百姓无法正常从事生产劳动，民不聊生，社会矛盾激化。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>三征高句丽始末</h3>
+        <div class="body">
+          <p>教材称「三次征辽东」，对手主要是辽东、朝鲜半岛北部的<strong>高句丽</strong>（「三征朝鲜」是通俗说法）。612 年第一次：倾全国兵力号称二百万，宇文述等率陆军深入，于萨水（清川江）大败。613 年第二次：因杨玄感起兵后方被迫撤军。614 年第三次：国内已乱，高句丽也疲敝请降，炀帝班师——得一纸降表，国力已近耗竭。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>杨玄感起兵（613）</h3>
+        <div class="body">
+          <p>杨玄感，开国重臣杨素之子。二征高句丽时他在黎阳督运粮草，趁后方空虚起兵，达官子弟多有响应。兵败被杀后，炀帝穷究党与，大开杀戒。意义在于：此前起义多是编户民变，杨玄感是<strong>统治集团内部</strong>公开反叛——对应教材「一些隋朝官员也趁机起事」，是隋亡从民变升级为全面崩溃的关键节点。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>雁门之围（615）</h3>
+        <div class="body">
+          <p>大业十一年（615）八月，隋炀帝北巡塞外，东突厥始毕可汗率数十万骑将其围困于雁门（今山西代县一带）。城中粮食仅支二十日；后以诏书募兵、许嫁公主于突厥，始得撤围。此后炀帝惧北疆，再未有效控驭边军，加速了地方势力离心。教材未写此役，但它是「对外两线透支」的绝佳注脚。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>府兵制与征发</h3>
+        <div class="body">
+          <p>隋唐前期行府兵制：兵农合一，府兵番上宿卫或出征。大规模征辽东需动员编户丁男，与均田编户、赋役制度绑定——这解释了教材「役使大量农民，百姓无法正常从事生产劳动」为何会直接击穿农业与社会秩序。</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="media-frame">
+      <img src="assets/yanmen-siege.png" alt="雁门之围想象图，边关被围" width="1536" height="1024" />
+      <p class="media-cap">雁门之围：东线未了，北线又危——帝国的边疆防御被透支到极限</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== C7 速亡 ========== -->
+<section class="chapter" id="c7" data-chapter="7">
+  <div class="wrap">
+    <p class="kicker">第七幕 · 崩塌</p>
+    <h2>618：盛极一时<br />为何戛然而止</h2>
+    <p class="lede">起义首先爆发在深受徭役、兵役之苦的今山东地区，随即迅速扩展到全国。在起义军和反隋势力的打击下，隋朝的统治濒临崩溃。</p>
+
+    <div class="split">
+      <div>
+        <div class="year">约 611 起 · 618</div>
+        <div class="prose">
+          <p><strong>民不聊生。</strong>最终导致大规模农民起义。起义首先爆发在深受徭役、兵役之苦的今山东地区，随即迅速扩展到全国。各地形成了许多反隋队伍，一些隋朝官员也趁机起事。在起义军和反隋势力的打击下，隋朝的统治濒临崩溃。</p>
+          <p><strong>末世惨状（相关史事）。</strong>隋朝末年，许多老百姓为逃避徭役和兵役，被迫采用断手断足的方式，时称「福手福足」。因严重饥荒又得不到赈济，有的地区百姓连草根树皮也找不到，只好「煮土而食」。起义军在发布的檄文中，痛斥隋炀帝：「罄南山之竹，书罪无穷；决东海之波，流恶难尽。」</p>
+          <p><strong>材料研读。</strong>「父母不保其赤子，夫妻相弃于匡床，万户则城郭空虚，千里则烟火断灭。」——《旧唐书·李密传》。为什么隋朝末年会出现这样的状况？作答方向：连年大工程与征辽 → 丁壮远役、田地荒芜 → 饥馑与家庭解体 → 千里萧条。</p>
+          <p><strong>结局。</strong>618 年，隋炀帝在江都被部下杀死，盛极一时的隋朝随之灭亡。</p>
+        </div>
+      </div>
+      <div class="media-frame">
+        <img src="assets/fall-sui.png" alt="隋末战乱与荒芜景象" width="1536" height="1024" />
+      </div>
+    </div>
+
+    <div class="pullquote">
+      「君王忍把平陈业，只换雷塘数亩田。」
+      <cite>——唐 · 罗隐《炀帝陵》。课后讨论：隋炀帝为什么会落得如此下场？隋朝速亡的原因是什么？</cite>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <span class="tag book">标准作答骨架</span>
+        <h3>隋速亡原因</h3>
+        <div class="body">
+          <p>①<strong>滥用民力</strong>：营东都、开运河、修长城驰道、多次巡游、三次征辽东，长期大规模征发；②<strong>生产破坏</strong>：百姓无法正常从事生产劳动，民不聊生，社会矛盾激化；③<strong>全面反抗</strong>：农民起义（山东首发、扩展全国）与官员起事叠加；④<strong>结构因素（拓展）</strong>：二世而亡、结束分裂后大工程透支，与秦有相似处——为汉、唐铺路，自身却倒在转折点上。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag extend">拓展</span>
+        <h3>秦隋对照</h3>
+        <div class="body">
+          <p>秦、隋常被并称：皆结束长期分裂、皆有大型国家工程、皆短期制度创新（郡县/科举与运河）、皆二世而亡，并为后续强盛王朝（汉、唐）铺路。对照有助于把「统一—建设—透支—崩溃」抽象成可迁移的历史结构，但答题时仍须先立足教材材料。</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== C8 讨论 ========== -->
+<section class="chapter soft" id="c8" data-chapter="8">
+  <div class="wrap">
+    <p class="kicker">收束 · 课堂</p>
+    <h2>把课讲完，把题答清</h2>
+    <p class="lede">用三分钟回顾时间线，再用板书讨论题收口。建议投影本节，边讲边点章节。</p>
+
+    <div class="board">
+      <h3>课堂讨论 / 课后活动</h3>
+      <ol>
+        <li>科举制度的创立对当时的社会产生了什么影响？（权力集中 · 阶层流动 · 官僚文化素养）</li>
+        <li>隋炀帝为什么会落得如此下场？隋朝速亡的原因是什么？（滥用民力 → 民不聊生 → 起义与官员起事）</li>
+        <li>皮日休说「若无水殿龙舟事，共禹论功不较多」。你如何评价大运河的功与过？（短期成本 / 长期收益）</li>
+        <li>【拓展】比较文帝「开皇之治」与炀帝「不惜民力」：同一套国家能力，为何结出相反的果实？</li>
+      </ol>
+      <p class="hint">板书建议：黑板左侧画时间轴（581–618），右侧画「统一 → 制度 → 工程 → 透支 → 崩塌」因果链；「教材」用白笔，「拓展」用彩笔。</p>
+    </div>
+
+    <div class="cards" style="margin-top:40px">
+      <article class="card">
+        <span class="tag extend">时间 × 举措</span>
+        <h3>配套矩阵版</h3>
+        <div class="body">
+          <p>若需要按「时间纵向 × 举措横向」对照查阅（可筛选教材/拓展、点开因果链），请打开同目录下的 <code>sui-lesson1-matrix.html</code>。本页适合课堂讲授，矩阵版适合备课检索与学生自学。</p>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag book">一句话总结</span>
+        <h3>本课主线</h3>
+        <div class="body">
+          <p>隋用制度与工程把分裂的中国重新缝合，并留下运河、科举、律令这些「唐所继承」的遗产；又因把同一套动员能力用到透支，三十八年而亡。繁荣与开放的时代，是从这份遗产与教训里长出来的。</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>人教版《中国历史》七年级下册 第一单元 第 1 课 · 课堂教学页<br />
+  教材内容依据课本整理；标注「拓展」者为服务理解的制度史补充。配图为教学示意，非文物原照。</p>
+</footer>
+
+<div class="toast" id="toast">使用 ← → 切换章节</div>
+<div class="flip">
+  <button type="button" id="prevBtn" aria-label="上一章">‹</button>
+  <button type="button" id="nextBtn" aria-label="下一章">›</button>
+</div>
+
+<script>
+(function () {
+  const chapters = Array.from(document.querySelectorAll(".chapter[data-chapter]"));
+  const navLinks = Array.from(document.querySelectorAll("#navLinks a"));
+  const progress = document.getElementById("progress");
+  const toast = document.getElementById("toast");
+  let idx = 0;
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove("show"), 1800);
+  }
+
+  function goTo(i) {
+    idx = Math.max(0, Math.min(chapters.length - 1, i));
+    chapters[idx].scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function currentFromScroll() {
+    const mid = window.scrollY + window.innerHeight * 0.35;
+    let best = 0;
+    chapters.forEach((el, i) => {
+      if (el.offsetTop <= mid) best = i;
+    });
+    // hero / timeline at top
+    if (window.scrollY < 200) {
+      navLinks.forEach((a) => a.classList.remove("active"));
+      return;
+    }
+    idx = best;
+    const id = chapters[idx].id;
+    navLinks.forEach((a) => {
+      a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+    });
+  }
+
+  function onScroll() {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    progress.style.width = max > 0 ? (h.scrollTop / max) * 100 + "%" : "0%";
+    currentFromScroll();
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  document.getElementById("prevBtn").addEventListener("click", () => goTo(idx - 1));
+  document.getElementById("nextBtn").addEventListener("click", () => goTo(idx + 1));
+
+  document.addEventListener("keydown", (e) => {
+    if (e.target && /input|textarea|select/i.test(e.target.tagName)) return;
+    if (e.key === "ArrowRight" || e.key === "PageDown" || (e.key === " " && !e.shiftKey)) {
+      e.preventDefault();
+      goTo(idx + 1);
+    } else if (e.key === "ArrowLeft" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
+      e.preventDefault();
+      goTo(idx - 1);
+    } else if (e.key >= "1" && e.key <= "8") {
+      e.preventDefault();
+      goTo(parseInt(e.key, 10) - 1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (e.key === "End") {
+      e.preventDefault();
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+  });
+
+  // first-visit hint
+  setTimeout(() => showToast("← → 或空格切换章节 · 数字 1–8 跳转"), 1200);
+})();
+</script>
+</body>
+</html>

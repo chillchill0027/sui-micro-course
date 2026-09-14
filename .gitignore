@@ -1,9 +1,16 @@
 .sites-runtime/
 .site-package/
 *.tar.gz
+.DS_Store
 
 # 课本与课件原始素材保留在本地，不进入站点源码仓库
 /隋朝统一与灭亡.pptx
 /1.png
 /2.png
 /3.png
+
+# 本地构建 / Codex 工作缓存与打包件不入库
+/.work/
+/.codex-finalizer/
+/.worktrees/
+/隋朝微格课-网页讲义-*.zip
