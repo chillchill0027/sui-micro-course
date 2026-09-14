@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>隋朝统一与灭亡 · 时间轴 × 横向卡片</title>
+<style>
+:root {
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --sub: #86868b;
+  --blue: #0071e3;
+  --bg: #fff;
+  --soft: #f5f5f7;
+  --line: rgba(0,0,0,.08);
+  --radius: 24px;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro SC", "SF Pro Text", "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--blue); text-decoration: none; }
+
+/* progress */
+.progress {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: var(--blue); width: 0%; z-index: 200;
+  transition: width .1s linear;
+}
+
+/* localnav */
+.localnav {
+  position: sticky; top: 0; z-index: 100;
+  height: 52px;
+  display: flex; align-items: center;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: rgba(255,255,255,.72);
+  border-bottom: 1px solid var(--line);
+}
+.localnav-inner {
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  padding: 0 20px;
+  display: flex; align-items: center; gap: 18px;
+  overflow-x: auto;
+}
+.brand {
+  font-size: 17px; font-weight: 600; letter-spacing: -.02em;
+  white-space: nowrap; color: var(--ink); flex-shrink: 0;
+}
+.years {
+  display: flex; gap: 10px; flex: 1;
+  font-size: 12px; color: var(--muted);
+  overflow-x: auto;
+  padding: 8px 0;
+  scrollbar-width: none;
+}
+.years::-webkit-scrollbar { display: none; }
+.years a {
+  color: var(--muted); white-space: nowrap;
+  padding: 4px 10px; border-radius: 980px;
+  border: 1px solid transparent;
+}
+.years a:hover { color: var(--ink); background: rgba(0,0,0,.04); }
+.years a.active {
+  color: var(--ink); background: var(--soft);
+  border-color: var(--line); font-weight: 500;
+}
+.nav-side { font-size: 12px; color: var(--blue); white-space: nowrap; flex-shrink: 0; }
+
+/* hero */
+.hero {
+  min-height: calc(100vh - 52px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 80px 20px 60px;
+  background: #000; color: #f5f5f7;
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url("assets/hero-sui-capital.png") center/cover no-repeat;
+  opacity: .5;
+}
+.hero-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.25) 45%, rgba(0,0,0,.75));
+}
+.hero-content { position: relative; z-index: 1; max-width: 820px; }
+.hero h1 {
+  font-size: clamp(48px, 8vw, 80px); font-weight: 600;
+  letter-spacing: -.03em; line-height: 1.05; margin: 0 0 14px;
+}
+.hero .sub {
+  font-size: clamp(19px, 2.4vw, 28px); color: #a1a1a6;
+  margin: 0 0 12px; font-weight: 400;
+}
+.hero .how {
+  font-size: 15px; color: #86868b; margin: 28px 0 36px;
+}
+.btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 12px 24px; border-radius: 980px; font-size: 17px;
+  border: none; cursor: pointer; font-family: inherit;
+}
+.btn-fill { background: var(--blue); color: #fff; }
+.btn-ghost { background: transparent; color: #2997ff; border: 1px solid rgba(41,151,255,.4); }
+
+/* time section */
+.period {
+  padding: 72px 0 40px;
+  border-bottom: 1px solid var(--line);
+}
+.period.alt { background: var(--soft); }
+.period-head {
+  max-width: 980px; margin: 0 auto 28px;
+  padding: 0 20px;
+  display: grid; grid-template-columns: 120px 1fr auto;
+  gap: 20px; align-items: end;
+}
+@media (max-width: 700px) {
+  .period-head { grid-template-columns: 1fr; gap: 8px; }
+}
+.period-year {
+  font-size: 42px; font-weight: 600; letter-spacing: -.03em;
+  color: var(--blue); line-height: 1;
+}
+.period-year small {
+  display: block; font-size: 13px; font-weight: 500;
+  color: var(--sub); margin-top: 6px; letter-spacing: 0;
+}
+.period-title {
+  font-size: clamp(28px, 4vw, 40px); font-weight: 600;
+  letter-spacing: -.025em; margin: 0; line-height: 1.15;
+}
+.period-lede {
+  grid-column: 2 / 3;
+  font-size: 17px; color: var(--muted); margin: 8px 0 0;
+  max-width: 36em;
+}
+@media (max-width: 700px) {
+  .period-lede { grid-column: 1; }
+}
+.period-nav {
+  display: flex; gap: 8px;
+}
+.period-nav button {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--line); background: #fff;
+  cursor: pointer; font-size: 18px; color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.period-nav button:disabled { opacity: .35; cursor: default; }
+.period.alt .period-nav button { background: #fff; }
+
+/* horizontal track */
+.track-wrap {
+  position: relative;
+  margin: 0;
+  padding: 8px 0 28px;
+}
+.track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: max(20px, calc((100vw - 980px) / 2));
+  padding-inline: max(20px, calc((100vw - 980px) / 2));
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.track::-webkit-scrollbar { display: none; }
+.track.dragging { cursor: grabbing; scroll-snap-type: none; }
+
+/* card */
+.card {
+  flex: 0 0 min(420px, 82vw);
+  scroll-snap-align: start;
+  background: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 28px rgba(0,0,0,.06);
+  display: flex; flex-direction: column;
+  min-height: 420px;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.period.alt .card { background: #fff; }
+.card.wide { flex-basis: min(560px, 88vw); }
+.card.dark {
+  background: #1d1d1f; color: #f5f5f7;
+}
+.card.dark .tag.extend { background: rgba(255,255,255,.14); color: #f5f5f7; }
+.card.dark .body { color: #f5f5f7; }
+.card.dark .note { color: #86868b; }
+.card-img {
+  height: 180px; background: #e8e8ed;
+  background-size: cover; background-position: center;
+}
+.card-body {
+  padding: 24px 26px 28px;
+  display: flex; flex-direction: column; flex: 1;
+}
+.tag {
+  display: inline-block; align-self: flex-start;
+  font-size: 12px; font-weight: 500;
+  padding: 3px 10px; border-radius: 980px;
+  margin-bottom: 12px;
+  background: var(--soft); color: var(--muted);
+}
+.tag.book { background: var(--blue); color: #fff; }
+.tag.extend { background: #424245; color: #f5f5f7; }
+.tag.cost { background: #9a4b1f; color: #fff; }
+.card h3 {
+  font-size: 24px; font-weight: 600;
+  letter-spacing: -.02em; margin: 0 0 12px; line-height: 1.2;
+}
+.body {
+  font-size: 15.5px; line-height: 1.65; color: var(--ink);
+  flex: 1;
+}
+.body p { margin: 0 0 .75em; }
+.body p:last-child { margin-bottom: 0; }
+.body strong { font-weight: 600; }
+.note {
+  margin-top: 14px; font-size: 13px; color: var(--sub);
+  padding-top: 12px; border-top: 1px solid var(--line);
+}
+.card.dark .note { border-top-color: rgba(255,255,255,.1); }
+
+/* dots */
+.dots {
+  display: flex; gap: 6px; justify-content: center;
+  margin-top: -8px; margin-bottom: 8px;
+}
+.dots span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #d2d2d7; transition: background .2s, width .2s;
+}
+.dots span.on { background: var(--ink); width: 18px; border-radius: 4px; }
+
+/* end */
+.wrap {
+  max-width: 980px; margin: 0 auto; padding: 72px 20px 100px;
+}
+.end-board {
+  background: #1d1d1f; color: #f5f5f7;
+  border-radius: var(--radius); padding: 40px 44px;
+}
+.end-board h2 {
+  font-size: 36px; font-weight: 600; letter-spacing: -.02em;
+  margin: 0 0 16px;
+}
+.end-board p { color: #a1a1a6; font-size: 17px; margin: 0 0 20px; }
+.end-board ol { margin: 0; padding-left: 1.2em; font-size: 17px; line-height: 1.7; }
+.end-board li { margin-bottom: 10px; }
+
+footer {
+  text-align: center; font-size: 12px; color: var(--sub);
+  padding: 0 20px 50px;
+}
+
+/* toast */
+.toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: rgba(29,29,31,.92); color: #f5f5f7;
+  font-size: 13px; padding: 10px 18px; border-radius: 980px;
+  opacity: 0; pointer-events: none; z-index: 300;
+  transition: opacity .3s, transform .3s;
+  backdrop-filter: blur(10px);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<nav class="localnav">
+  <div class="localnav-inner">
+    <a class="brand" href="#top">隋朝 · 时间轴</a>
+    <div class="years" id="years">
+      <a href="#t581">581</a>
+      <a href="#t583">583</a>
+      <a href="#t589">589</a>
+      <a href="#tKaihuang">开皇</a>
+      <a href="#t604">604</a>
+      <a href="#t605">605</a>
+      <a href="#t610">610</a>
+      <a href="#t612">612–14</a>
+      <a href="#tUprising">起义</a>
+      <a href="#t615">615</a>
+      <a href="#t618">618</a>
+    </div>
+    <a class="nav-side" href="#end">小结</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-content">
+    <p class="sub" style="color:#f5f5f7;opacity:.9;font-size:17px;margin-bottom:10px">人教版七下 · 第一单元 · 第 1 课</p>
+    <h1>隋朝统一与灭亡</h1>
+    <p class="sub">纵向时间 · 横向举措卡片</p>
+    <p class="how">向下滚动沿时间前进 · 每一时间节点可左右滑动卡片 · 拖拽或点箭头</p>
+    <div class="btns">
+      <a class="btn btn-fill" href="#t581">从 581 开始</a>
+      <a class="btn btn-ghost" href="#tKaihuang">直接到开皇之治</a>
+    </div>
+  </div>
+</header>
+
+<!-- ========== 581 ========== -->
+<section class="period" id="t581" data-year="581">
+  <div class="period-head">
+    <div class="period-year">581<small>代周建隋</small></div>
+    <div>
+      <h2 class="period-title">杨坚登上帝位</h2>
+      <p class="period-lede">北周末年，外戚杨坚执掌朝政。这一年他夺取北周政权，建立隋朝，仍以长安为都——三百年大分裂的合拢，从这里开始。</p>
+    </div>
+    <div class="period-nav" data-for="track-581">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-581" tabindex="0">
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>外戚执掌朝政</h3>
+          <div class="body">
+            <p>北周末年，朝政并不掌握在皇帝手中，而是落在外戚<strong>杨坚</strong>手里。他凭借关陇贵族集团的支持与联姻网络，一步步把军政大权收拢到自己手中。教材用「执掌朝政」四字，已点明权力重心早已转移。</p>
+            <p>理解这一句，才能理解后面「夺取北周政权」为何几乎没有发生大规模内战——禅代的条件，在兵权与人心都已到位时才成熟。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>建立隋朝，仍都长安</h3>
+          <div class="body">
+            <p>581 年，杨坚夺取北周政权，建立隋朝，<strong>仍以长安为都</strong>，是为隋文帝。「仍」字很关键：他没有立刻迁都，而是先稳住关中根本，再图统一与治理。</p>
+            <p>国号「隋」，后世也写作「隋」。隋文帝由此开启了一个与秦、汉并称「再造统一」的王朝，尽管它只存在了三十多年。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card dark">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>关陇集团与禅代逻辑</h3>
+          <div class="body">
+            <p>北周本身就出自关陇军事贵族集团，府兵制把胡汉将领与土地、部民绑在一起。杨坚是这一集团里最有权势的外戚，代周不是「农民起义推翻旧朝」，而是<strong>同一统治集团内部的权力重组</strong>。</p>
+            <p>这决定了隋初治理的特点：大量保留前朝官僚与制度资源，行政能迅速上手；同时也把关陇贵族的既得利益带进了新王朝，后来的改革（科举、律令）都要与这股力量周旋。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-581"></div>
+  </div>
+</section>
+
+<!-- ========== 583 ========== -->
+<section class="period alt" id="t583" data-year="583">
+  <div class="period-head">
+    <div class="period-year">583<small>迁都大兴</small></div>
+    <div>
+      <h2 class="period-title">营建并迁都大兴城</h2>
+      <p class="period-lede">建立隋朝两年后，迁都大兴城，是为京师。新都不仅是政治中心，也是后来大运河体系的北方锚点之一。</p>
+    </div>
+    <div class="period-nav" data-for="track-583">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-583" tabindex="0">
+      <article class="card wide" style="min-height:360px">
+        <div class="card-img" style="background-image:url('assets/hero-sui-capital.png')"></div>
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>大兴城成为京师</h3>
+          <div class="body">
+            <p>教材写：建立隋朝<strong>两年后</strong>，迁都大兴城，是为京师。大兴城在汉长安城东南重新规划营建，规模宏大、里坊整齐，是当时世界上规划水平极高的都城之一。它奠定了后来唐长安城的基本格局。</p>
+            <p>迁都不是搬家，而是把帝国的心脏安到更利于控制东方、连接水陆交通的位置上。教师可结合课本地图指出：关中是根本，洛阳是枢纽，涿郡是北门，余杭是南粮——这套空间格局后来由大运河缝合。</p>
+          </div>
+          <div class="note">教学提示：板书可画「关中—洛阳—涿郡—余杭」十字坐标，为讲运河作铺垫。</div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>为何还要东都洛阳</h3>
+          <div class="body">
+            <p>文帝以大兴为京师，炀帝后来又大修东都洛阳。两都并用，是因为帝国重心在经济上已南移、东移：关中粮产有限，「就食洛阳」在隋唐是常态；洛阳居天下之中，便于控山东、江南并对接运河。</p>
+            <p>所以「迁都大兴」与后来「营建东都」不是反复折腾，而是同一套<strong>政治中心—经济腹地</strong>问题的两次回答。讲到 604 营东都时，可回扣本页。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-583"></div>
+  </div>
+</section>
+
+<!-- ========== 589 ========== -->
+<section class="period" id="t589" data-year="589">
+  <div class="period-head">
+    <div class="period-year">589<small>灭陈统一</small></div>
+    <div>
+      <h2 class="period-title">渡江灭陈，全国一统</h2>
+      <p class="period-lede">南方陈后主沉迷享乐。隋军渡过长江，结束长期分裂——这是继秦、西晋之后又一次全国性统一。</p>
+    </div>
+    <div class="period-nav" data-for="track-589">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-589" tabindex="0">
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>陈后主与南朝末局</h3>
+          <div class="body">
+            <p>当时南方陈朝的最后一个皇帝<strong>陈后主</strong>不问政事，沉迷享乐。朝廷上下文恬武嬉，长江天险并不能弥补政治与军力的双重衰败。教材用寥寥数语，点出统一战争「师出有名」的现实基础：不是以强凌弱，而是南方统治本身已难以为继。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>589 年灭陈</h3>
+          <div class="body">
+            <p>589 年，隋军<strong>渡过长江</strong>，灭掉陈朝，统一全国。从 581 建隋到 589 灭陈，前后约八年——隋没有在建国之初就盲目南征，而是先稳定内部、恢复国力，再完成统一。这个节奏本身就是「文帝治理」的注脚。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材 · 重点</span>
+          <h3>统一的历史意义</h3>
+          <div class="body">
+            <p>隋的统一，结束了<strong>长期分裂</strong>局面，顺应了<strong>民族交融</strong>的大趋势，进一步促进了<strong>南北方经济、文化的交流和发展</strong>。</p>
+            <p>这三句是本课必须让学生背熟的意义表述。后面的大运河、科举、律令，全部建立在「全国是一个政治—经济共同体」这个前提上。若没有统一，就不可能有贯通南北的漕运，也很难推行全国一致的选官标准。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-589"></div>
+  </div>
+</section>
+
+<!-- ========== 开皇 ========== -->
+<section class="period alt" id="tKaihuang" data-year="开皇">
+  <div class="period-head">
+    <div class="period-year">开皇<small>581–604 文帝治绩</small></div>
+    <div>
+      <h2 class="period-title">开皇之治：把国家装进制度里</h2>
+      <p class="period-lede">发展经济、编订户籍、减轻赋役、统一度量衡、加强集权、修订刑律——教材写得很克制，展开却是一整套国家操作系统。左右滑动卡片。</p>
+    </div>
+    <div class="period-nav" data-for="track-kai">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-kai" tabindex="0">
+      <article class="card wide">
+        <div class="card-img" style="background-image:url('assets/wendi-court.png')"></div>
+        <div class="card-body">
+          <span class="tag book">教材 · 总述</span>
+          <h3>国力迅速恢复</h3>
+          <div class="body">
+            <p>隋朝建立后，发展经济，编订户籍，核实户口，减轻百姓赋役负担，统一币制和度量衡；加强中央集权，修订和减省刑律，简化机构，提高行政效率。</p>
+            <p>隋朝经济迅速恢复和发展，<strong>人口数量和垦田面积大幅度增长</strong>，成为国力强盛的王朝。后世史家常以年号称之为「开皇之治」——教材未用此四字，但用「国力强盛的王朝」表达了同一判断。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>编订户籍，核实户口</h3>
+          <div class="body">
+            <p>「编户」不是登记身份证那么简单，而是把每一个丁口绑定到均田与课役上：户口清了，税基才稳；税基稳了，才有条件<strong>减轻赋役</strong>。这一组动作是开皇国力的底层操作系统。</p>
+            <p>教材把「核实户口」写在「减轻赋役」前面，顺序本身就是因果——先有可核查的国家名册，后有可执行的减负政策。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>大索貌阅（585）</h3>
+          <div class="body">
+            <p>「大索」是全面清查户口，「貌阅」是当面核对年龄体貌，防止「诈老诈小」逃避赋役。豪强荫庇的人口被重新纳入编户，国家税基显著扩大。</p>
+            <p>它回答的是教材那句「核实户口」里最关键的三个字——<strong>怎么核</strong>。可让学生思考：若没有貌阅，中央的「减负」会不会被地方与豪强截留？</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>输籍定样</h3>
+          <div class="body">
+            <p>朝廷颁布统一的「输籍」样册，规定各等户的赋役标准并张榜公布。地方官不能随意抬高等级，豪强也难以上下其手。</p>
+            <p>它与大索貌阅配套：一个<strong>扩户口</strong>，一个<strong>定税则</strong>。没有定样，中央「减轻赋役」的善意到不了民户——这是理解「制度」而非「口号」的绝佳案例。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>减轻赋役</h3>
+          <div class="body">
+            <p>减轻百姓赋役负担，使社会生产得以恢复。与炀帝时期「每年都要征发大批劳动力」形成<strong>正反对照</strong>，是课后「隋速亡原因」的关键变量。</p>
+            <p>课堂建议：讲完本卡后立刻问——「如果只许用一张表对比文帝与炀帝，你会画哪两列？」答案应落在「惜民力 / 不惜民力」。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>统一币制和度量衡</h3>
+          <div class="body">
+            <p>统一币制和度量衡，降低交易与财政成本，便利南北经济交流。与全国统一叠加后，跨区域市场才有可能真正运转。</p>
+            <p>这也是后来大运河能发挥「全国物流」功能的前提之一：没有统一的度量与货币，水道再通，交易成本仍然高企。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card dark">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>开皇律条文要点</h3>
+          <div class="body">
+            <p>开皇元年（581）颁《开皇律》，三年修订：条文大幅删减，定型<strong>十二篇</strong>；刑罚统一为笞、杖、徒、流、死<strong>五刑</strong>，废除枭首、轘裂等酷刑，死刑须复奏；「十恶」入名例，谋反等不得赦免。</p>
+            <p>《开皇律》是后世《唐律疏议》的直接蓝本。教材「修订和减省刑律」六个字，展开就是一部中国法制史的枢纽——可告诉学生：唐的「律令格式」站在隋的肩膀上。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>三省六部定型</h3>
+          <div class="body">
+            <p>中书（内史）省决策、门下省审议、尚书省执行，下设吏、户、礼、兵、刑、工六部。分工明确，削弱权臣专权空间，提高行政效率——正对应教材「加强中央集权……简化机构，提高行政效率」。</p>
+            <p>唐承隋制，这一架构沿用近三百年。可让学生用一句话概括：把「一个人说了算」变成「一套流程说了算」。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材 · 知识拓展</span>
+          <h3>含嘉仓：天下第一粮仓</h3>
+          <div class="body">
+            <p>含嘉仓是隋唐时期最大的国家粮仓，被誉为「天下第一粮仓」。始建于隋，位于东都洛阳含嘉城内。经考古发掘，遗址面积 40 多万平方米，有数百个粮窖；重点发掘的 160 号粮窖保存约 50 万斤炭化谷粒。</p>
+            <p>大运河开凿后，大量粮食经水路从江南运到洛阳；关中灾荒缺粮时，朝廷可及时调拨，稳定市场。仓储 + 漕运 = 帝国的财政缓冲器。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>均田与租调役背景</h3>
+          <div class="body">
+            <p>隋大体承北朝均田传统：国家授田于民，受田者承担租（粮）、调（绢布）、役（力役/兵役）。教材写「减轻赋役」「编订户籍」，背后是这一国家—编户关系。唐前期仍基本沿用并完善。</p>
+            <p>理解「编户 → 课役 → 国力」链条，才能评价炀帝为何「不惜民力」会被视为亡国之征——他动的是整条链条的承重墙。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-kai"></div>
+  </div>
+</section>
+
+<!-- ========== 604 ========== -->
+<section class="period" id="t604" data-year="604">
+  <div class="period-head">
+    <div class="period-year">604<small>炀帝即位</small></div>
+    <div>
+      <h2 class="period-title">从文帝遗产到炀帝野心</h2>
+      <p class="period-lede">国力、仓储、制度都已就绪。新即位的隋炀帝要做的，是用这套能力去完成更大规模的国家叙事——以及更大的透支。</p>
+    </div>
+    <div class="period-nav" data-for="track-604">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-604" tabindex="0">
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>营建东都洛阳</h3>
+          <div class="body">
+            <p>隋炀帝急功近利，不惜民力，每年都要征发大批劳动力，驱使他们<strong>营建东都洛阳</strong>……洛阳居天下之中，便于控山东、江南并对接运河，战略上并不荒谬。</p>
+            <p>但营建本身就是巨大民力支出。教材把它写进「不惜民力」的清单，提示学生：评价一项工程，既要看目的是否合理，也要看动员方式是否透支社会。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>修筑长城和驰道</h3>
+          <div class="body">
+            <p>驱使他们营建东都洛阳、开凿大运河、修筑长城和驰道。长城重在北防，驰道改善陆路，与运河同属「全国交通—防务工程包」。</p>
+            <p>问题不在单点，而在<strong>叠加</strong>：同一时期多项超大规模动员同时进行，编户丁壮被反复抽离田亩——这是「急功近利」的结构性含义。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag cost">代价线索</span>
+          <h3>多次巡游与龙舟仪仗</h3>
+          <div class="body">
+            <p>他多次巡游，乘坐高大华丽的龙舟，随行船只浩浩荡荡，仅拉纤民工就多达数十万，耗费大量人力和财力。</p>
+            <p>教材用「巡游耗费」与运河工程并置：同一组交通能力，既可运粮治国，也可运人夸耀。这是本课最重要的一组对照——<strong>工具无罪，用法有价</strong>。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>三下江南（江都之巡）</h3>
+          <div class="body">
+            <p>大业元年（605）、六年（610）、十二年（616）三次大规模南巡（史家统计口径略有差异，教材统称「多次巡游」）。船队绵延二百余里，挽船民夫、骑兵夹岸而行，沿途州县供顿极繁。</p>
+            <p>最后一次南巡后即<strong>滞留江都</strong>，618 年在那里被杀——南巡终点成了王朝终点。可让学生在地图上沿运河标出江都，预埋结尾。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-604"></div>
+  </div>
+</section>
+
+<!-- ========== 605 ========== -->
+<section class="period alt" id="t605" data-year="605">
+  <div class="period-head">
+    <div class="period-year">605<small>运河 · 进士科</small></div>
+    <div>
+      <h2 class="period-title">大运河与科举：两项千年工程</h2>
+      <p class="period-lede">同一年前后，帝国同时推开两条战线：一条用水道缝合南北，一条用考试重开门阀垄断的仕途。它们都活得比隋朝更久。</p>
+    </div>
+    <div class="period-nav" data-for="track-605">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-605" tabindex="0">
+      <article class="card wide">
+        <div class="card-img" style="background-image:url('assets/canal-sui.png')"></div>
+        <div class="card-body">
+          <span class="tag book">教材 · 重点</span>
+          <h3>开通大运河</h3>
+          <div class="body">
+            <p>为了加强南北交通，巩固隋朝对全国的统治，隋炀帝征发几百万人，从 605 年起，陆续开凿了一条贯通南北的大运河。</p>
+            <p>大运河以<strong>洛阳</strong>为中心，北抵<strong>涿郡</strong>，南至<strong>余杭</strong>，连接了<strong>海河、黄河、淮河、长江和钱塘江</strong>五大水系，全长 <strong>2700 多千米</strong>，是当时世界上最长的运河。</p>
+            <p>作用：带动沿河城市的繁荣与发展，加强了南北地区政治、经济和文化的交流，有利于国家统一和民族交融。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材 · 读图</span>
+          <h3>四段河道</h3>
+          <div class="body">
+            <p>一般记作：<strong>永济渠</strong>（涿郡—洛阳方向）、<strong>通济渠</strong>（洛阳—淮水）、<strong>邗沟</strong>（淮水—江都）、<strong>江南河</strong>（江都—余杭）。</p>
+            <p>教材「读地图」要求指出四段，并找出端点与所连水系。课堂可请学生上台沿「洛阳—涿郡」「洛阳—余杭」两条轴线标注。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材 · 想一想</span>
+          <h3>为何是南北走向</h3>
+          <div class="body">
+            <p>我国地势<strong>西高东低</strong>，主要河流多自西向东流。为什么大运河是南北走向？</p>
+            <p>因为大一统帝国需要把政治中心（洛阳/关中）与江南粮仓、幽燕防务用水路缝合起来——东西向的天然水道做不到这件事。人工运河补的是<strong>国家治理所需的南北物流</strong>，不是自然地理的延长线。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>漕运与转漕</h3>
+          <div class="body">
+            <p>「漕」指国家组织的水路粮运。江南粮经运河汇集洛阳，再转输关中，称为<strong>转漕</strong>。</p>
+            <p>运河不只是观光水道，而是帝国粮食供应链的大动脉——理解了这一点，才能理解教材为何把它写进「巩固统治」而不是「奇观工程」。含嘉仓就是这条链上的洛阳枢纽仓。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card dark">
+        <div class="card-body">
+          <span class="tag book">教材 · 引诗</span>
+          <h3>皮日休如何评价</h3>
+          <div class="body">
+            <p>「尽道隋亡为此河，至今千里赖通波。若无水殿龙舟事，共禹论功不较多。」</p>
+            <p>唐人皮日休承认运河利在千里的同时，把「亡隋」责任指向<strong>龙舟巡游的奢靡</strong>，而不是运河本身。课堂可让学生改写一句：如果你是皮日休，会把「功」和「过」分别记在谁头上？</p>
+          </div>
+        </div>
+      </article>
+      <article class="card wide">
+        <div class="card-img" style="background-image:url('assets/keju-sui.png')"></div>
+        <div class="card-body">
+          <span class="tag book">教材 · 重点</span>
+          <h3>开创科举取士制度</h3>
+          <div class="body">
+            <p>魏晋南北朝时期，官员的选拔权由上层权贵掌控，选官看重<strong>门第</strong>，不太注重才识。世家大族子弟垄断了官场中的中高级职位，平民子弟很难晋升。</p>
+            <p>隋文帝即位后，废除了前朝的选官制度，<strong>依才能取士</strong>。隋炀帝时，设置<strong>进士科</strong>，标志着通过考试选拔人才的<strong>科举制创立</strong>。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材 · 重点</span>
+          <h3>科举制的历史意义</h3>
+          <div class="body">
+            <p>科举制度是我国古代选官制度的重大变革。它的延续和完善，加强了朝廷在选官上的权力，使通过考试选拔官员的用人制度逐渐确立。</p>
+            <p>它不仅<strong>扩大了统治基础</strong>，对<strong>社会阶层流动</strong>也起到积极作用，还显著提高了整个官僚队伍的<strong>文化素养</strong>。此后，科举制成为历朝选拔官员的主要制度，一直延续了约 <strong>1300 年</strong>。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>九品中正制为何被废</h3>
+          <div class="body">
+            <p>九品中正制由曹魏确立：中正品评人物为九品，授官以家世、状品为要。运行日久，「上品无寒门，下品无势族」，中央难以真正按才授官。</p>
+            <p>隋统一后需要更直接的国家选才通道。这是教材「选官看重门第 → 依才能取士」背后的制度史前史。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>隋唐科举演变线索</h3>
+          <div class="body">
+            <p>隋：文帝分科考试取士 → 炀帝置进士科。唐：科目增多（进士、明经等），程序逐渐严密，成为士人入仕主渠道。宋以后糊名、誊录等使考试更严密。</p>
+            <p>初中只需掌握「隋创立、约 1300 年」；拓展用于建立「察举 → 九品中正 → 科举」的选拔史时间感。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-605"></div>
+  </div>
+</section>
+
+<!-- ========== 610 ========== -->
+<section class="period" id="t610" data-year="610">
+  <div class="period-head">
+    <div class="period-year">610<small>经略流求</small></div>
+    <div>
+      <h2 class="period-title">渡海抵达流求</h2>
+      <p class="period-lede">隋朝称今天的台湾为流求。加强联系与认识，与后来的辽东战争性质完全不同。</p>
+    </div>
+    <div class="period-nav" data-for="track-610">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-610" tabindex="0">
+      <article class="card wide">
+        <div class="card-body">
+          <span class="tag book">教材 · 相关史事</span>
+          <h3>三次遣使与 610 年之行</h3>
+          <div class="body">
+            <p>隋朝称今天的台湾为流求。隋炀帝即位不久，先后<strong>三次</strong>派人前往流求，其中第三次是在 <strong>610 年</strong>。隋炀帝派武将文臣率领一万多人，从<strong>义安</strong>出发，渡海抵达流求，加强了与流求的联系。</p>
+            <p>隋朝对台湾地区的认识比以往前进了一大步。《隋书》中有对流求的专门记载，详细记述了这一地区地理、物产、社会组织、饮食、服饰、习俗等各方面的情况。</p>
+          </div>
+          <div class="note">教学提示：与「征辽东」对板对比——流求是经略与认识，辽东是战争与透支。</div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>《隋书》记载的价值</h3>
+          <div class="body">
+            <p>正史为边疆族群立传并详记物产习俗，本身就是「国家知识」扩张的标志。可告诉学生：文献里的流求，是帝国重新认识自身疆域与邻里的过程，而不只是一次远航故事。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-610"></div>
+  </div>
+</section>
+
+<!-- ========== 起义 / 612 ========== -->
+<section class="period alt" id="tUprising" data-year="611起">
+  <div class="period-head">
+    <div class="period-year">611 起<small>农民起义</small></div>
+    <div>
+      <h2 class="period-title">山东起事，扩展全国</h2>
+      <p class="period-lede">深受徭役、兵役之苦的今山东地区首先爆发起义，随即迅速扩展。末世的惨状被写进相关史事与材料研读。</p>
+    </div>
+    <div class="period-nav" data-for="track-up">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-up" tabindex="0">
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>起义为何从山东爆发</h3>
+          <div class="body">
+            <p>起义首先爆发在深受徭役、兵役之苦的今<strong>山东地区</strong>，随即迅速扩展到全国。各地形成了许多反隋队伍，一些隋朝官员也趁机起事。</p>
+            <p>地理与战争相关：三征辽东的物资与兵员转运，山东是前线后勤带，压力最先到达编户。可让学生在地图上把「山东—辽东」连成一条线。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材 · 相关史事</span>
+          <h3>福手福足与煮土而食</h3>
+          <div class="body">
+            <p>隋朝末年，许多老百姓为逃避徭役和兵役，被迫采用断手断足的方式，时称「<strong>福手福足</strong>」。因严重饥荒又得不到赈济，有的地区百姓连草根树皮也找不到，只好「煮土而食」。</p>
+            <p>起义军在发布的檄文中，痛斥隋炀帝：「<strong>罄南山之竹，书罪无穷；决东海之波，流恶难尽。</strong>」——「罄竹难书」的典故即出于此类檄文语境。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材 · 材料研读</span>
+          <h3>《旧唐书·李密传》</h3>
+          <div class="body">
+            <p>「父母不保其赤子，夫妻相弃于匡床，万户则城郭空虚，千里则烟火断灭。」——《旧唐书·李密传》。</p>
+            <p><strong>设问：</strong>为什么隋朝末年会出现这样的状况？<br />
+            <strong>作答方向：</strong>连年大工程与征辽 → 丁壮远役、田地荒芜 → 饥馑与家庭解体 → 千里萧条。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card dark">
+        <div class="card-body">
+          <span class="tag cost">代价</span>
+          <h3>暴政与民不聊生</h3>
+          <div class="body">
+            <p>教材因果链非常清晰：隋炀帝急功近利、不惜民力 → 每年征发大批劳动力 → 百姓无法正常从事生产劳动 → <strong>民不聊生，社会矛盾激化</strong> → 大规模农民起义。</p>
+            <p>讲这一页时，建议回指开皇年间「减轻赋役」卡片——同一帝国，两代君主，两种动员伦理。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-up"></div>
+  </div>
+</section>
+
+<!-- ========== 612 ========== -->
+<section class="period" id="t612" data-year="612–14">
+  <div class="period-head">
+    <div class="period-year">612–614<small>三征辽东</small></div>
+    <div>
+      <h2 class="period-title">三次征辽与杨玄感起兵</h2>
+      <p class="period-lede">教材写「三次征辽东，役使大量农民」。展开是三场战争、一次内部叛乱，以及帝国动员能力的彻底耗尽。</p>
+    </div>
+    <div class="period-nav" data-for="track-612">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-612" tabindex="0">
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">教材</span>
+          <h3>三次征辽东</h3>
+          <div class="body">
+            <p>隋炀帝还<strong>三次征辽东</strong>，役使大量农民，百姓无法正常从事生产劳动，民不聊生，社会矛盾激化。</p>
+            <p>与营东都、开运河、修长城驰道、巡游叠加，构成「不惜民力」的完整清单；直接推动起义。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>三征高句丽始末</h3>
+          <div class="body">
+            <p>教材称「三次征辽东」，对手主要是辽东、朝鲜半岛北部的<strong>高句丽</strong>（「三征朝鲜」是通俗说法）。</p>
+            <p><strong>612</strong>：倾全国兵力号称二百万，宇文述等率陆军深入，于萨水（清川江）大败。<strong>613</strong>：再举兵，因杨玄感起兵后方被迫撤军。<strong>614</strong>：国内已乱，高句丽也疲敝请降，炀帝班师——得一纸降表，国力已近耗竭。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>杨玄感起兵（613）</h3>
+          <div class="body">
+            <p>杨玄感，开国重臣杨素之子。二征高句丽时他在黎阳督运粮草，趁后方空虚起兵，达官子弟多有响应。兵败被杀后，炀帝穷究党与，大开杀戒。</p>
+            <p>意义：此前起义多是编户民变，杨玄感是<strong>统治集团内部</strong>公开反叛——对应教材「一些隋朝官员也趁机起事」，是隋亡从民变升级为全面崩溃的关键节点。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>府兵制与征发</h3>
+          <div class="body">
+            <p>隋唐前期行府兵制：兵农合一，府兵番上宿卫或出征。大规模征辽东需动员编户丁男，与均田编户、赋役制度绑定。</p>
+            <p>这解释了教材「役使大量农民，百姓无法正常从事生产劳动」为何会直接击穿农业与社会秩序——战争抽的是生产系统的人，不只是军队。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-612"></div>
+  </div>
+</section>
+
+<!-- ========== 615 ========== -->
+<section class="period alt" id="t615" data-year="615">
+  <div class="period-head">
+    <div class="period-year">615<small>雁门之围</small></div>
+    <div>
+      <h2 class="period-title">北巡被围，威信扫地</h2>
+      <p class="period-lede">东线未了，北线又危。教材未写此役，却是理解「对外两线透支」的绝佳注脚。</p>
+    </div>
+    <div class="period-nav" data-for="track-615">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-615" tabindex="0">
+      <article class="card wide">
+        <div class="card-img" style="background-image:url('assets/yanmen-siege.png')"></div>
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>雁门之围始末</h3>
+          <div class="body">
+            <p>大业十一年（615）八月，隋炀帝北巡塞外，东突厥始毕可汗率数十万骑将其围困于<strong>雁门</strong>（今山西代县一带）。城中军民粮食仅支二十日；后以诏书募兵、许嫁公主于突厥，始得撤围。</p>
+            <p>此后炀帝惧北疆，再未有效控驭边军，加速了地方势力离心。三征辽东劳师于东，雁门又被困于北——<strong>对外两线透支</strong>，中央威信在围城中被公开戳破。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>为何教材未载仍值得讲</h3>
+          <div class="body">
+            <p>雁门之围不在人教版必讲清单，但它是连接「三征辽东—起义—官员起事—隋亡」的中间环：皇帝本人在边塞被围，说明帝国已无力同时维持对外威慑与对内秩序。</p>
+            <p>若课堂时间紧，可只用一句话带过：「北边也被围过一次，杨广差一点没能回来。」</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-615"></div>
+  </div>
+</section>
+
+<!-- ========== 618 ========== -->
+<section class="period" id="t618" data-year="618">
+  <div class="period-head">
+    <div class="period-year">618<small>隋朝灭亡</small></div>
+    <div>
+      <h2 class="period-title">江都之变，三十八年而亡</h2>
+      <p class="period-lede">隋炀帝在江都被部下杀死，盛极一时的隋朝随之灭亡。留下的是运河、科举、律令，和一句必须让学生说清楚的「为什么」。</p>
+    </div>
+    <div class="period-nav" data-for="track-618">
+      <button type="button" data-dir="-1" aria-label="左">‹</button>
+      <button type="button" data-dir="1" aria-label="右">›</button>
+    </div>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="track-618" tabindex="0">
+      <article class="card wide">
+        <div class="card-img" style="background-image:url('assets/fall-sui.png')"></div>
+        <div class="card-body">
+          <span class="tag book">教材 · 重点</span>
+          <h3>618 年隋亡</h3>
+          <div class="body">
+            <p>在起义军和反隋势力的打击下，隋朝的统治濒临崩溃。<strong>618 年</strong>，隋炀帝在<strong>江都</strong>被部下杀死，盛极一时的隋朝随之灭亡。</p>
+            <p>从 581 到 618，约三十八年。统一的功业、制度的遗产与大工程的代价，压缩在同一个人、同一朝的两端。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card dark">
+        <div class="card-body">
+          <span class="tag book">教材 · 课后活动</span>
+          <h3>罗隐《炀帝陵》</h3>
+          <div class="body">
+            <p>「君王忍把平陈业，只换雷塘数亩田。」</p>
+            <p><strong>议一议：</strong>隋炀帝为什么会落得如此下场？隋朝速亡的原因是什么？</p>
+            <p>标准作答骨架：①急功近利、滥用民力（营东都、开运河、修长城驰道、巡游、三征辽东）；②生产破坏、民不聊生；③起义与反隋势力合力。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag extend">拓展</span>
+          <h3>秦隋对照</h3>
+          <div class="body">
+            <p>秦、隋常被并称：皆结束长期分裂、皆有大型国家工程、皆短期制度创新（郡县 / 科举与运河）、皆二世而亡，并为后续强盛王朝（汉、唐）铺路。</p>
+            <p>对照有助于把「统一—建设—透支—崩溃」抽象成可迁移的历史结构；答题时仍须先立足教材材料。</p>
+          </div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <span class="tag book">课堂收束</span>
+          <h3>一句话主线</h3>
+          <div class="body">
+            <p>隋用制度与工程把分裂的中国重新缝合，并留下运河、科举、律令这些「唐所继承」的遗产；又因把同一套动员能力用到透支，三十八年而亡。</p>
+            <p>繁荣与开放的时代，是从这份<strong>遗产与教训</strong>里长出来的。</p>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="dots" data-for="track-618"></div>
+  </div>
+</section>
+
+<div class="wrap" id="end">
+  <div class="end-board">
+    <h2>课堂讨论</h2>
+    <p>按时间扫完横向卡片后，用下面问题收口。也可打开矩阵版 <code>sui-lesson1-matrix.html</code> 做对照检索。</p>
+    <ol>
+      <li>科举制度的创立对当时的社会产生了什么影响？（权力集中 · 阶层流动 · 官僚文化素养）</li>
+      <li>隋炀帝为什么会落得如此下场？隋朝速亡的原因是什么？（滥用民力 → 民不聊生 → 起义与官员起事）</li>
+      <li>皮日休说「若无水殿龙舟事，共禹论功不较多」。你如何评价大运河的功与过？（短期成本 / 长期收益）</li>
+      <li>【拓展】比较文帝「开皇之治」与炀帝「不惜民力」：同一套国家能力，为何结出相反的果实？</li>
+    </ol>
+  </div>
+</div>
+
+<footer>
+  人教版《中国历史》七年级下册 第一单元 第 1 课 · 时间轴横向卡片教学页<br />
+  「教材」必讲 ·「拓展」制度史补充 · 配图为教学示意
+</footer>
+
+<div class="toast" id="toast">左右滑动卡片 · 上下滚动沿时间前进</div>
+
+<script>
+(function () {
+  const progress = document.getElementById("progress");
+  const yearLinks = Array.from(document.querySelectorAll("#years a"));
+  const periods = Array.from(document.querySelectorAll(".period"));
+  const toast = document.getElementById("toast");
+
+  /* —— horizontal tracks —— */
+  function setupTrack(track) {
+    const cards = Array.from(track.querySelectorAll(".card"));
+    const dotsHost = document.querySelector('.dots[data-for="' + track.id + '"]');
+    const nav = document.querySelector('.period-nav[data-for="' + track.id + '"]');
+
+    function cardStep() {
+      if (!cards[0]) return track.clientWidth * 0.8;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.gap) || 18;
+      return cards[0].getBoundingClientRect().width + gap;
+    }
+
+    function nearestIndex() {
+      const left = track.scrollLeft;
+      let best = 0, bestD = Infinity;
+      cards.forEach((c, i) => {
+        const d = Math.abs(c.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft || 0) - left);
+        // offsetLeft includes padding edge; use scroll position vs card position
+        const cd = Math.abs(c.offsetLeft - cards[0].offsetLeft - left);
+        if (cd < bestD) { bestD = cd; best = i; }
+      });
+      return best;
+    }
+
+    function renderDots() {
+      if (!dotsHost) return;
+      const i = nearestIndex();
+      dotsHost.innerHTML = cards.map((_, k) => '<span class="' + (k === i ? "on" : "") + '"></span>').join("");
+    }
+
+    function updateNav() {
+      if (!nav) return;
+      const max = track.scrollWidth - track.clientWidth - 2;
+      const btns = nav.querySelectorAll("button");
+      btns.forEach((b) => {
+        const dir = parseInt(b.dataset.dir, 10);
+        b.disabled = dir < 0 ? track.scrollLeft <= 2 : track.scrollLeft >= max;
+      });
+    }
+
+    function scrollByDir(dir) {
+      track.scrollBy({ left: dir * cardStep(), behavior: "smooth" });
+    }
+
+    if (nav) {
+      nav.addEventListener("click", (e) => {
+        const b = e.target.closest("button[data-dir]");
+        if (!b) return;
+        scrollByDir(parseInt(b.dataset.dir, 10));
+      });
+    }
+
+    track.addEventListener("scroll", () => {
+      renderDots();
+      updateNav();
+    }, { passive: true });
+
+    // drag to scroll (desktop)
+    let down = false, startX = 0, startLeft = 0, moved = false;
+    track.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      down = true; moved = false;
+      startX = e.clientX; startLeft = track.scrollLeft;
+      track.classList.add("dragging");
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener("pointermove", (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      track.scrollLeft = startLeft - dx;
+    });
+    function endDrag(e) {
+      if (!down) return;
+      down = false;
+      track.classList.remove("dragging");
+      try { track.releasePointerCapture(e.pointerId); } catch (_) {}
+      // snap
+      const i = nearestIndex();
+      const target = cards[i];
+      if (target) track.scrollTo({ left: target.offsetLeft - cards[0].offsetLeft, behavior: "smooth" });
+    }
+    track.addEventListener("pointerup", endDrag);
+    track.addEventListener("pointercancel", endDrag);
+
+    // keyboard when focused
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); scrollByDir(1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); scrollByDir(-1); }
+    });
+
+    renderDots();
+    updateNav();
+  }
+
+  document.querySelectorAll(".track").forEach(setupTrack);
+
+  /* —— progress + active year —— */
+  function onScroll() {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    progress.style.width = max > 0 ? (h.scrollTop / max) * 100 + "%" : "0%";
+
+    const mid = window.scrollY + window.innerHeight * 0.3;
+    let active = null;
+    periods.forEach((p) => {
+      if (p.offsetTop <= mid) active = p.id;
+    });
+    yearLinks.forEach((a) => {
+      a.classList.toggle("active", active && a.getAttribute("href") === "#" + active);
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  setTimeout(() => {
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2600);
+  }, 1000);
+
+  // vertical keyboard: change year section
+  let yearIdx = 0;
+  document.addEventListener("keydown", (e) => {
+    if (e.target && /input|textarea|select/i.test(e.target.tagName)) return;
+    if (e.target && e.target.classList && e.target.classList.contains("track")) return;
+    if (e.key === "PageDown") {
+      e.preventDefault();
+      yearIdx = Math.min(periods.length - 1, yearIdx + 1);
+      periods[yearIdx].scrollIntoView({ behavior: "smooth" });
+    } else if (e.key === "PageUp") {
+      e.preventDefault();
+      yearIdx = Math.max(0, yearIdx - 1);
+      periods[yearIdx].scrollIntoView({ behavior: "smooth" });
+    }
+  });
+})();
+</script>
+</body>
+</html>
