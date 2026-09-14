@@ -55,7 +55,7 @@ window.SUI_EVIDENCE = (() => {
       b.setAttribute('aria-expanded', String(open)); answer.hidden = !open;
       b.innerHTML = open ? '收起分析 <span>−</span>' : '展开分析 <span>＋</span>';
     }));
-    root.querySelectorAll('.map-page').forEach(page => {
+    root.querySelectorAll('.map-page:not(.unify-page)').forEach(page => {
       const img = page.querySelector('.history-map'), cap = page.querySelector('.map-caption');
       page.querySelectorAll('[data-map]').forEach(b => b.addEventListener('click', () => {
         const year = b.dataset.map;
@@ -65,7 +65,8 @@ window.SUI_EVIDENCE = (() => {
         cap.textContent = year === '572' ? '572 年：北周、北齐、陈并存，早于隋建立 9 年。' : '612 年：隋统一之后的形势，距 589 年统一已有 23 年。';
         page.querySelectorAll('[data-map]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',String(x===b));});
       }));
-      page.querySelector('.map-zoom').addEventListener('click', e=>{
+      const zbtn = page.querySelector('.map-zoom');
+      if (zbtn) zbtn.addEventListener('click', e=>{
         const zoom = img.classList.toggle('zoomed');
         e.currentTarget.setAttribute('aria-pressed',String(zoom));e.currentTarget.textContent=zoom?'还原全图':'放大中原';
       });
@@ -74,6 +75,87 @@ window.SUI_EVIDENCE = (() => {
       const panel=b.closest('.canal-diagram');panel.dataset.focus=b.dataset.canal;
       panel.querySelectorAll('[data-canal]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
     }));
+
+    /* 统一进程：先修复全景，再放大 */
+    const UNIFY = {
+      '577': { label:'577 · 北周吞并北齐', repair:'修复全景：北周—北齐—陈', zoom:'放大中原', layers:['zhou','chen'], note:'北方已一体，南方仍是陈。' },
+      '581': { label:'581 · 隋文帝建立隋朝', repair:'修复全景：北方改旗为隋', zoom:'放大关中', layers:['sui-north','daxing'], note:'581 建隋，仍都长安。' },
+      '583': { label:'583 · 迁都大兴城', repair:'修复全景：标出大兴与洛阳', zoom:'放大关中—洛阳', layers:['daxing','luoyang'], note:'为运河以洛阳为中心作铺垫。' },
+      '589': { label:'589 · 过长江统一陈朝', repair:'修复全景：南北同色 = 统一', zoom:'放大江淮', layers:['sui-all','jiangdu'], note:'结束分裂，促进南北交流。' }
+    };
+    root.querySelectorAll('.unify-map').forEach(page => {
+      const key = page.dataset.unify || '577';
+      const cfg = UNIFY[key] || UNIFY['577'];
+      const img = page.querySelector('.history-map');
+      const cap = page.querySelector('.map-caption');
+      const btnR = page.querySelector('[data-unify-repair]');
+      const btnZ = page.querySelector('[data-unify-zoom]');
+      const overlay = page.querySelector('.unify-overlay');
+      let repaired = false, zoomed = false;
+      function paint() {
+        (overlay||page).querySelectorAll('[data-layer]').forEach(el => el.classList.remove('on'));
+        cfg.layers.forEach(id => {
+          const el = (overlay||page).querySelector('[data-layer="'+id+'"]');
+          if (el) el.classList.add('on');
+        });
+      }
+      if (btnR) btnR.addEventListener('click', () => {
+        repaired = true;
+        paint();
+        btnR.disabled = true;
+        btnR.textContent = '已修复 ✓';
+        btnR.setAttribute('aria-pressed','true');
+        if (btnZ) { btnZ.disabled = false; }
+        if (cap) cap.textContent = '全景已修复：' + cfg.note + ' 现在可以「' + cfg.zoom + '」。';
+      });
+      if (btnZ) btnZ.addEventListener('click', () => {
+        if (!repaired) return;
+        zoomed = !zoomed;
+        img.classList.toggle('zoomed', zoomed);
+        btnZ.setAttribute('aria-pressed', String(zoomed));
+        btnZ.textContent = zoomed ? '还原全图' : cfg.zoom;
+        if (cap) cap.textContent = zoomed ? '局部放大中 · 再点还原' : ('全景已修复：' + cfg.note);
+      });
+    });
   }
-  return {cards, render: type => ({timeline,maps,canal}[type])(), bind};
+
+  function unifyMap(stepKey) {
+    const UNIFY = {
+      '577': { label:'577 · 北周吞并北齐', repair:'修复全景：北周—北齐—陈', zoom:'放大中原', layers:['zhou','chen'], note:'北方已一体，南方仍是陈。', steps:['先看 572 底图上的三方','点修复：北方加深','再放大中原细看'] },
+      '581': { label:'581 · 隋文帝建立隋朝', repair:'修复全景：北方改旗为隋', zoom:'放大关中', layers:['sui-north','daxing'], note:'581 建隋，仍都长安。', steps:['北方换旗为隋','标出都城','放大关中'] },
+      '583': { label:'583 · 迁都大兴城', repair:'修复全景：标出大兴与洛阳', zoom:'放大关中—洛阳', layers:['daxing','luoyang'], note:'为运河以洛阳为中心作铺垫。', steps:['标大兴','标洛阳','放大两都连线'] },
+      '589': { label:'589 · 过长江统一陈朝', repair:'修复全景：南北同色 = 统一', zoom:'放大江淮', layers:['sui-all','jiangdu'], note:'结束分裂，促进南北交流。', steps:['南方并入隋色','标江都','放大江淮'] }
+    };
+    const step = UNIFY[stepKey] || UNIFY['577'];
+    return shell('地图 · 先修复，再放大局部', step.label, `
+      <div class="map-workspace unify-map" data-unify="${stepKey}">
+        <div class="map-column">
+          <div class="map-toolbar">
+            <button type="button" class="map-switch" data-unify-repair aria-pressed="false">${step.repair}</button>
+            <button type="button" class="map-zoom" data-unify-zoom aria-pressed="false" disabled>${step.zoom}</button>
+          </div>
+          <div class="map-window" style="position:relative;overflow:hidden">
+            <img class="history-map" src="assets/map-divided-572.jpg" alt="572年历史地图，用作统一进程示意底图" />
+            <div class="unify-overlay" aria-hidden="true">
+              <span class="blob blob-zhou" data-layer="zhou"></span>
+              <span class="blob blob-chen" data-layer="chen"></span>
+              <span class="blob blob-sui-n" data-layer="sui-north"></span>
+              <span class="blob blob-sui-all" data-layer="sui-all"></span>
+              <span class="pin pin-daxing" data-layer="daxing"><i></i>大兴</span>
+              <span class="pin pin-luoyang" data-layer="luoyang"><i></i>洛阳</span>
+              <span class="pin pin-jiangdu" data-layer="jiangdu"><i></i>江都</span>
+            </div>
+          </div>
+          <p class="map-caption">先点「${step.repair}」，完成全景后再放大。</p>
+        </div>
+        <div class="map-reading">
+          <h3>操作步骤</h3>
+          <ol><li><b>先修复</b><br/>完整地图上染色 / 标点，看清全局。</li><li><b>再放大</b><br/>放大局部，细讲空间关系。</li><li><b>可还原</b><br/>再点一次回全景。</li></ol>
+          ${step.steps.map((s,i)=>`<div class="step"><b>${i+1}</b><span>${s}</span></div>`).join('')}
+          <p class="evidence-note">${step.note} 叠色为教学示意，非精确疆界。</p>
+        </div>
+      </div>`, 'map-page unify-page');
+  }
+
+  return {cards, render: type => ({timeline,maps,canal}[type])(), unifyMap, bind};
 })();
