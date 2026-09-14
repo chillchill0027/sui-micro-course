@@ -5,1203 +5,611 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>隋朝统一与灭亡 · 课堂播放器</title>
 <style>
-:root {
-  --ink: #1d1d1f;
-  --muted: #6e6e73;
-  --sub: #86868b;
-  --blue: #0071e3;
-  --blue-soft: #e8f1fc;
-  --bg: #f5f5f7;
-  --card: #ffffff;
-  --line: rgba(0,0,0,.08);
-  --rail-w: 112px;
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro SC", "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+:root{
+  --ink:#1d1d1f;--muted:#6e6e73;--sub:#86868b;--blue:#0071e3;
+  --bg:#f5f5f7;--card:#fff;--line:rgba(0,0,0,.08);--rail-w:108px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro SC","PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  --sui:#c45c26;--zhou:#3d6f8a;--beiqi:#c4a35a;--chen:#2f7d5c;--war:#9a4b1f;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body {
-  height: 100%;
-  overflow: hidden;
-  font-family: var(--font);
-  color: var(--ink);
-  background: var(--bg);
-  -webkit-font-smoothing: antialiased;
-}
-button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
-img { max-width: 100%; display: block; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+img{max-width:100%;display:block}
+.app{display:grid;grid-template-columns:var(--rail-w) 1fr;height:100vh;width:100vw}
 
-.app {
-  display: grid;
-  grid-template-columns: var(--rail-w) 1fr;
-  height: 100vh;
-  width: 100vw;
-}
+/* rail */
+.rail{background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding:12px 0 10px;z-index:5;user-select:none}
+.rail-btn{width:36px;height:36px;border-radius:50%;background:var(--bg);font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.rail-btn:disabled{opacity:.3;cursor:default}
+.rail-btn.next-year{background:var(--blue);color:#fff}
+.rail-track{flex:1;width:100%;overflow-y:auto;overflow-x:hidden;padding:10px 8px;scrollbar-width:none;position:relative}
+.rail-track::-webkit-scrollbar{display:none}
+.rail-track::before{content:"";position:absolute;left:50%;top:18px;bottom:18px;width:2px;background:#e5e5ea;transform:translateX(-50%);z-index:0}
+.rail-fill{position:absolute;left:50%;top:18px;width:2px;background:var(--blue);transform:translateX(-50%);z-index:1;height:0;transition:height .35s ease}
+.year-node{position:relative;z-index:2;width:100%;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 0;cursor:pointer}
+.year-dot{width:11px;height:11px;border-radius:50%;background:#fff;border:2.5px solid #d2d2d7;transition:.2s;flex-shrink:0}
+.year-node.done .year-dot{border-color:var(--blue);background:var(--blue)}
+.year-node.active .year-dot{border-color:var(--blue);background:var(--blue);transform:scale(1.35);box-shadow:0 0 0 4px rgba(0,113,227,.15)}
+.year-label{font-size:11px;font-weight:600;color:var(--sub);text-align:center;line-height:1.15}
+.year-node.active .year-label{color:var(--blue)}
+.year-node.done .year-label{color:var(--ink)}
+.rail-brand{font-size:10px;color:var(--sub);text-align:center;padding:8px 4px 0;line-height:1.3}
 
-/* ========== LEFT RAIL: time + progress ========== */
-.rail {
-  background: #fff;
-  border-right: 1px solid var(--line);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px 0 10px;
-  z-index: 5;
-  user-select: none;
-}
-.rail-btn {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--bg);
-  color: var(--ink);
-  font-size: 16px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0,0,0,.06);
-  transition: background .15s, opacity .15s;
-}
-.rail-btn:hover { background: #e8e8ed; }
-.rail-btn:disabled { opacity: .3; cursor: default; }
-.rail-btn.next-year { background: var(--blue); color: #fff; }
-.rail-btn.next-year:hover { background: #0077ED; }
-.rail-btn.next-year:disabled { background: #a0c4ef; opacity: 1; }
+/* stage */
+.stage{position:relative;overflow:hidden;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+.stage-top{display:flex;align-items:center;justify-content:space-between;padding:16px 28px 8px;flex-shrink:0}
+.stage-kicker{font-size:14px;color:var(--blue);font-weight:600}
+.stage-count{font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
+.deck{flex:1;display:flex;overflow:hidden;position:relative;min-height:0}
+.slides{display:flex;width:100%;height:100%;transition:transform .45s cubic-bezier(.32,.72,0,1);will-change:transform}
+.slide{flex:0 0 100%;width:100%;height:100%;padding:8px 56px 20px;display:flex;min-height:0}
+.nav-side{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 2px 12px rgba(0,0,0,.12);font-size:22px;z-index:4;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.nav-side:disabled{opacity:.3;cursor:default}
+.nav-side.prev{left:8px}.nav-side.next{right:8px}
+.stage-bottom{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:6px 28px 16px;gap:16px}
+.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap}
+.dots button{width:8px;height:8px;border-radius:50%;background:#d2d2d7;padding:0;transition:.2s}
+.dots button.on{width:22px;border-radius:4px;background:var(--ink)}
+.hint{font-size:12px;color:var(--sub);white-space:nowrap}
 
-.rail-track {
-  flex: 1;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 10px 10px 8px;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  position: relative;
-}
-.rail-track::-webkit-scrollbar { display: none; }
+/* cards */
+.big-card{background:var(--card);border-radius:28px;box-shadow:0 2px 6px rgba(0,0,0,.04),0 18px 48px rgba(0,0,0,.08);width:100%;height:100%;display:grid;grid-template-columns:1.05fr .95fr;overflow:hidden;min-height:0}
+.big-card.no-img{grid-template-columns:1fr}
+.big-card.wide-img{grid-template-columns:1.15fr .85fr}
+@media (max-width:900px){.big-card,.big-card.wide-img{grid-template-columns:1fr}.slide{padding:8px 48px 16px}}
+.big-card .content{padding:32px 36px 28px;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
+.big-card .content::-webkit-scrollbar{width:4px}.big-card .content::-webkit-scrollbar-thumb{background:#d2d2d7;border-radius:2px}
+.tag{display:inline-flex;align-self:flex-start;font-size:13px;font-weight:500;padding:5px 12px;border-radius:980px;margin-bottom:12px;background:var(--bg);color:var(--muted)}
+.tag.book{background:var(--blue);color:#fff}
+.tag.extend{background:#424245;color:#f5f5f7}
+.tag.cost{background:var(--war);color:#fff}
+.tag.map{background:var(--sui);color:#fff}
+.year-chip{font-size:14px;font-weight:600;color:var(--blue);margin-bottom:10px}
+.big-card h2{font-size:clamp(26px,3vw,38px);font-weight:600;letter-spacing:-.025em;line-height:1.15;margin:0 0 10px}
+.big-card .body{font-size:clamp(15.5px,1.3vw,18px);line-height:1.7;flex:1}
+.big-card .body p{margin:0 0 .8em}
+.big-card .body p:last-child{margin-bottom:0}
+.big-card .body strong{font-weight:600}
+.big-card .note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+.visual{background:#1d1d1f center/cover no-repeat;min-height:0;position:relative}
+.big-card.no-img .visual{display:none}
 
-/* spine line */
-.rail-track::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 18px; bottom: 18px;
-  width: 2px;
-  background: #e5e5ea;
-  transform: translateX(-50%);
-  border-radius: 1px;
-  z-index: 0;
-}
-.rail-fill {
-  position: absolute;
-  left: 50%;
-  top: 18px;
-  width: 2px;
-  background: var(--blue);
-  transform: translateX(-50%);
-  border-radius: 1px;
-  z-index: 1;
-  height: 0;
-  transition: height .35s ease;
-}
+/* scene */
+.scene-slide{align-items:center;justify-content:center}
+.chapter-scene{width:100%;max-width:920px;padding:24px 32px}
+.scene-eyebrow{font-size:14px;color:var(--blue);font-weight:600;margin-bottom:12px}
+.chapter-scene h2{font-size:clamp(34px,5vw,56px);font-weight:600;letter-spacing:-.03em;line-height:1.12;margin:0 0 16px}
+.scene-lead{font-size:clamp(17px,1.8vw,22px);color:var(--muted);margin-bottom:36px;line-height:1.5}
+.scene-points{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+@media (max-width:800px){.scene-points{grid-template-columns:1fr}}
+.scene-point{background:#fff;border-radius:20px;padding:22px 20px;box-shadow:0 1px 3px rgba(0,0,0,.04);opacity:0;transform:translateY(16px);animation:rise .55s ease forwards;animation-delay:calc(var(--order)*.12s+.15s)}
+@keyframes rise{to{opacity:1;transform:none}}
+.scene-point span{font-size:12px;color:var(--blue);font-weight:600}
+.scene-point h3{font-size:20px;margin:6px 0 8px;font-weight:600}
+.scene-point p{font-size:14px;color:var(--muted);line-height:1.45}
+.scene-prompt{font-size:14px;color:var(--sub)}
 
-.year-node {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 0 10px;
-  cursor: pointer;
-}
-.year-dot {
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2.5px solid #d2d2d7;
-  transition: border-color .2s, transform .2s, background .2s;
-  flex-shrink: 0;
-}
-.year-node.done .year-dot {
-  border-color: var(--blue);
-  background: var(--blue);
-}
-.year-node.active .year-dot {
-  border-color: var(--blue);
-  background: var(--blue);
-  transform: scale(1.35);
-  box-shadow: 0 0 0 4px rgba(0,113,227,.15);
-}
-.year-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--sub);
-  letter-spacing: -.01em;
-  line-height: 1.15;
-  text-align: center;
-  transition: color .2s;
-}
-.year-node.active .year-label { color: var(--blue); font-size: 12px; }
-.year-node.done .year-label { color: var(--ink); }
-/* mini progress bar per year */
-.year-bar {
-  width: 42px; height: 3px;
-  background: #e5e5ea;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.year-bar i {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: var(--blue);
-  border-radius: 2px;
-  transition: width .3s ease;
-}
-.year-node.done .year-bar i { width: 100%; }
-.year-node.active .year-bar i { background: var(--blue); }
+/* MAP PAGE */
+.map-stage{width:100%;height:100%;display:grid;grid-template-columns:1.3fr .7fr;gap:18px;min-height:0}
+@media (max-width:960px){.map-stage{grid-template-columns:1fr}}
+.map-panel{background:#fff;border-radius:24px;box-shadow:0 8px 32px rgba(0,0,0,.08);display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.map-panel header{padding:16px 20px 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.map-panel h2{font-size:22px;font-weight:600;letter-spacing:-.02em;margin:0}
+.map-status{font-size:12px;color:var(--sub)}
+.map-canvas{flex:1;min-height:0;padding:8px 12px 12px;display:flex;flex-direction:column}
+.map-view{flex:1;min-height:200px;background:linear-gradient(160deg,#eef3f7,#e4ebf0);border-radius:16px;overflow:hidden;position:relative}
+.map-svg{width:100%;height:100%;display:block;transition:transform .7s cubic-bezier(.32,.72,0,1)}
+.map-svg.zoomed{transform:scale(2.2)}
+.map-svg .land{fill:#dfe6ec;stroke:#b8c4ce;stroke-width:1.2}
+.map-svg .sea{fill:#c5d8e6}
+.map-svg .region{fill:#c9d2da;stroke:#fff;stroke-width:1.5;transition:fill .8s ease;cursor:default}
+.map-svg .region.zhou{fill:var(--zhou)}
+.map-svg .region.beiqi{fill:var(--beiqi)}
+.map-svg .region.chen{fill:var(--chen)}
+.map-svg .region.sui-fill{fill:var(--sui)}
+.map-svg .region.hi{stroke:var(--ink);stroke-width:2}
+.map-svg .marker{opacity:0;transition:opacity .5s ease,transform .5s ease;transform-origin:center;transform-box:fill-box}
+.map-svg .marker.on{opacity:1}
+.map-svg .marker circle{fill:var(--sui);stroke:#fff;stroke-width:2}
+.map-svg .marker text{font-size:11px;fill:var(--ink);font-weight:600}
+.map-legend{display:flex;flex-wrap:wrap;gap:10px;padding:8px 4px 0;font-size:12px;color:var(--muted)}
+.map-legend i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:4px;vertical-align:-1px}
+.map-controls{display:flex;flex-wrap:wrap;gap:8px;padding:10px 16px 14px;border-top:1px solid var(--line)}
+.btn-pill{padding:9px 16px;border-radius:980px;background:var(--bg);font-size:13px;font-weight:500;transition:.15s}
+.btn-pill:hover{background:#e8e8ed}
+.btn-pill.primary{background:var(--blue);color:#fff}
+.btn-pill.primary:disabled{background:#a0c4ef;cursor:default}
+.btn-pill.primary:hover:not(:disabled){background:#0077ED}
+.map-side{background:#fff;border-radius:24px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,.08);overflow:auto;min-height:0}
+.map-side h3{font-size:18px;margin:0 0 10px;font-weight:600}
+.map-side p{font-size:15px;line-height:1.65;color:var(--ink);margin-bottom:.75em}
+.map-side .step{display:flex;gap:10px;margin:12px 0;font-size:14px;color:var(--muted);align-items:flex-start}
+.map-side .step b{color:var(--blue);font-variant-numeric:tabular-nums;min-width:1.5em}
 
-.rail-brand {
-  font-size: 10px;
-  color: var(--sub);
-  text-align: center;
-  padding: 8px 6px 0;
-  line-height: 1.3;
-  letter-spacing: .02em;
-}
-
-/* ========== STAGE ========== */
-.stage {
-  position: relative;
-  overflow: hidden;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.stage-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 28px 10px;
-  flex-shrink: 0;
-}
-.stage-kicker {
-  font-size: 14px;
-  color: var(--blue);
-  font-weight: 600;
-}
-.stage-count {
-  font-size: 13px;
-  color: var(--sub);
-  font-variant-numeric: tabular-nums;
-}
-
-.deck {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  position: relative;
-  min-height: 0;
-}
-
-/* large card slide */
-.slides {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  transition: transform .45s cubic-bezier(.32,.72,0,1);
-  will-change: transform;
-}
-.slide {
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
-  padding: 8px 56px 24px;
-  display: flex;
-  min-height: 0;
-}
-@media (max-width: 900px) {
-  .slide { padding: 8px 48px 16px; }
-}
-
-.big-card {
-  background: var(--card);
-  border-radius: 28px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.04), 0 18px 48px rgba(0,0,0,.08);
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  overflow: hidden;
-  min-height: 0;
-}
-.big-card.no-img {
-  grid-template-columns: 1fr;
-}
-.big-card.has-img-wide {
-  grid-template-columns: 1.2fr 0.8fr;
-}
-@media (max-width: 900px) {
-  .big-card, .big-card.has-img-wide {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
-  .big-card .visual { min-height: 180px; max-height: 32vh; }
-}
-
-.big-card .content {
-  padding: 36px 40px 32px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-.big-card .content::-webkit-scrollbar { width: 4px; }
-.big-card .content::-webkit-scrollbar-thumb { background: #d2d2d7; border-radius: 2px; }
-
-.tag {
-  display: inline-flex;
-  align-self: flex-start;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 5px 12px;
-  border-radius: 980px;
-  margin-bottom: 14px;
-  background: var(--bg);
-  color: var(--muted);
-}
-.tag.book { background: var(--blue); color: #fff; }
-.tag.extend { background: #424245; color: #f5f5f7; }
-.tag.cost { background: #9a4b1f; color: #fff; }
-
-.big-card h2 {
-  font-size: clamp(28px, 3.2vw, 40px);
-  font-weight: 600;
-  letter-spacing: -.025em;
-  line-height: 1.15;
-  margin: 0 0 8px;
-}
-.year-chip {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--blue);
-  margin-bottom: 14px;
-}
-.big-card .body {
-  font-size: clamp(16px, 1.35vw, 19px);
-  line-height: 1.7;
-  color: var(--ink);
-  flex: 1;
-}
-.big-card .body p { margin: 0 0 0.85em; }
-.big-card .body p:last-child { margin-bottom: 0; }
-.big-card .body strong { font-weight: 600; }
-.big-card .note {
-  margin-top: 18px;
-  padding-top: 14px;
-  border-top: 1px solid var(--line);
-  font-size: 14px;
-  color: var(--sub);
-  line-height: 1.5;
-}
-
-.visual {
-  background: #1d1d1f center/cover no-repeat;
-  min-height: 0;
-  position: relative;
-}
-.visual::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(0,0,0,.08), transparent 30%);
-  pointer-events: none;
-}
-.big-card.no-img .visual { display: none; }
-
-/* dark card variant */
-.big-card.dark {
-  background: #1d1d1f;
-  color: #f5f5f7;
-}
-.big-card.dark .body { color: #f5f5f7; }
-.big-card.dark .note { color: #86868b; border-top-color: rgba(255,255,255,.12); }
-.big-card.dark .tag.extend { background: rgba(255,255,255,.14); }
-.big-card.dark .tag { background: rgba(255,255,255,.1); color: #a1a1a6; }
-
-/* side arrows */
-.nav-side {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.92);
-  box-shadow: 0 2px 12px rgba(0,0,0,.12);
-  font-size: 22px;
-  color: var(--ink);
-  z-index: 4;
-  display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(8px);
-  transition: opacity .2s, transform .2s;
-}
-.nav-side:hover { transform: translateY(-50%) scale(1.06); }
-.nav-side:disabled { opacity: .3; cursor: default; transform: translateY(-50%); }
-.nav-side.prev { left: 8px; }
-.nav-side.next { right: 8px; }
-
-/* bottom bar */
-.stage-bottom {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 28px 18px;
-  gap: 16px;
-}
-.dots {
-  display: flex;
-  gap: 6px;
-  flex: 1;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.dots button {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #d2d2d7;
-  padding: 0;
-  transition: width .2s, background .2s, border-radius .2s;
-}
-.dots button.on {
-  width: 22px;
-  border-radius: 4px;
-  background: var(--ink);
-}
-.hint {
-  font-size: 12px;
-  color: var(--sub);
-  white-space: nowrap;
-}
-
-/* intro overlay */
-.intro {
-  position: absolute; inset: 0;
-  z-index: 20;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.55)),
-    url("assets/hero-sui-capital.png") center/cover no-repeat;
-  color: #f5f5f7;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px;
-  transition: opacity .5s, visibility .5s;
-}
-.intro.hide {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.intro h1 {
-  font-size: clamp(40px, 6vw, 72px);
-  font-weight: 600;
-  letter-spacing: -.03em;
-  margin: 0 0 12px;
-}
-.intro .sub {
-  font-size: clamp(18px, 2vw, 24px);
-  color: #a1a1a6;
-  margin: 0 0 8px;
-}
-.intro .meta {
-  font-size: 14px;
-  color: #86868b;
-  margin: 0 0 36px;
-}
-.intro .btn {
-  display: inline-flex;
-  padding: 14px 32px;
-  border-radius: 980px;
-  background: var(--blue);
-  color: #fff;
-  font-size: 18px;
-  font-weight: 500;
-  box-shadow: 0 4px 20px rgba(0,113,227,.35);
-  transition: transform .15s;
-}
-.intro .btn:hover { transform: scale(1.04); }
-.intro .how {
-  margin-top: 28px;
-  font-size: 13px;
-  color: #86868b;
-  line-height: 1.6;
-}
-
-/* mobile rail collapse */
-@media (max-width: 640px) {
-  :root { --rail-w: 72px; }
-  .year-label { font-size: 10px; }
-  .year-bar { width: 28px; }
-  .slide { padding: 4px 40px 10px; }
-  .big-card .content { padding: 22px 20px; }
-}
+/* intro */
+.intro{position:absolute;inset:0;z-index:20;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.6)),url("assets/hero-sui-capital.png") center/cover no-repeat;color:#f5f5f7;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;transition:opacity .5s,visibility .5s}
+.intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+.intro h1{font-size:clamp(40px,6vw,72px);font-weight:600;letter-spacing:-.03em;margin:0 0 12px}
+.intro .sub{font-size:clamp(18px,2vw,24px);color:#a1a1a6;margin:0 0 8px}
+.intro .meta{font-size:14px;color:#86868b;margin:0 0 32px}
+.intro .btn{display:inline-flex;padding:14px 32px;border-radius:980px;background:var(--blue);color:#fff;font-size:18px;font-weight:500;box-shadow:0 4px 20px rgba(0,113,227,.35)}
+.intro .how{margin-top:24px;font-size:13px;color:#86868b;line-height:1.6}
+@media (max-width:640px){:root{--rail-w:72px}.year-label{font-size:10px}.slide{padding:4px 40px 10px}.big-card .content{padding:20px}}
 </style>
-<link rel="stylesheet" href="assets/presentation.css" />
 </head>
 <body>
 <div class="app">
-  <!-- LEFT RAIL -->
-  <aside class="rail" aria-label="历史时间节点">
-    <button class="rail-btn" id="yearUp" type="button" aria-label="上一时间节点">↑</button>
-    <div class="rail-track" id="railTrack">
-      
-      <!-- year nodes injected -->
-    </div>
-    <button class="rail-btn next-year" id="yearDown" type="button" aria-label="下一时间节点">↓</button>
-    <div class="rail-brand">时间<br/>节点</div>
+  <aside class="rail" aria-label="时间进度">
+    <button class="rail-btn" id="yearUp" type="button" aria-label="上一节点">↑</button>
+    <div class="rail-track" id="railTrack"><div class="rail-fill" id="railFill"></div></div>
+    <button class="rail-btn next-year" id="yearDown" type="button" aria-label="下一节点">↓</button>
+    <div class="rail-brand">时间<br/>进度</div>
   </aside>
-
-  <!-- STAGE -->
   <main class="stage">
     <div class="stage-top">
-      <div class="stage-kicker" id="stageKicker">581 · 代周建隋</div>
-      <div class="stage-tools"><span class="course-label">中国历史 · 七年级下册</span><button class="tool-btn" id="homeBtn" aria-label="返回课程封面">课程封面</button><button class="tool-btn" id="fullscreenBtn" aria-label="切换全屏">全屏 ↗</button><div class="stage-count" id="stageCount" aria-live="polite">1 / 1</div></div>
+      <div class="stage-kicker" id="stageKicker">封面</div>
+      <div class="stage-count" id="stageCount">1 / 1</div>
     </div>
-
     <div class="deck">
-      <button class="nav-side prev" id="cardPrev" type="button" aria-label="上一张">‹</button>
+      <button class="nav-side prev" id="cardPrev" type="button" aria-label="上一页">‹</button>
       <div class="slides" id="slides"></div>
-      <button class="nav-side next" id="cardNext" type="button" aria-label="下一张">›</button>
+      <button class="nav-side next" id="cardNext" type="button" aria-label="下一页">›</button>
     </div>
-
     <div class="stage-bottom">
-      <span class="hint">← → 翻页 · ↑ ↓ 换时间点</span>
+      <span class="hint">← → 翻页 · ↑ ↓ 换节点</span>
       <div class="dots" id="dots"></div>
       <span class="hint" id="periodHint"></span>
     </div>
-
     <div class="intro" id="intro">
-      <div class="intro-nav"><span>中国历史<span class="nav-divider"> / </span>七年级下册</span><span>第一单元 · 第 1 课</span></div>
-      <div class="intro-main">
-        <p class="intro-eyebrow">一个王朝的兴起，与落幕</p>
-        <h1>隋朝<span>统一与灭亡</span></h1>
-        <p class="intro-lead">结束分裂，开创制度。<br/>在短暂的王朝里，读懂影响千年的变革。</p>
-        <button class="btn" id="startBtn" type="button">开启这段历史 <span aria-hidden="true">↗</span></button>
-        <p class="how">按 Enter 开始 · 方向键翻页</p>
-      </div>
-      <div class="intro-footer"><span class="intro-dates">581 <i>—</i> 618<span>公元</span></span><span class="intro-caption">统一 · 治世 · 运河 · 科举 · 兴亡<small>配图为 AI 教学示意</small></span></div>
+      <p class="sub" style="color:#f5f5f7;opacity:.9;font-size:16px">人教版七下 · 第一单元 · 第 1 课</p>
+      <h1>隋朝统一与灭亡</h1>
+      <p class="sub">37 年的王朝 · 千年的遗产</p>
+      <p class="meta">581 — 618 · 课堂播放器</p>
+      <button class="btn" id="startBtn" type="button">开启这段历史</button>
+      <p class="how">地图页：先「修复染色」看全景，再「放大局部」细讲<br/>← → 翻页 · ↑ ↓ 换节点 · 1–9 / 0 跳转</p>
     </div>
   </main>
 </div>
 
-<script src="assets/evidence.js"></script>
 <script>
-(function () {
-  const YEARS = [
-    { id: "y581", label: "581", caption: "代周建隋" },
-    { id: "y583", label: "583", caption: "迁都大兴" },
-    { id: "y589", label: "589", caption: "灭陈统一" },
-    { id: "yKai", label: "581–604", caption: "文帝治理 · 回看" },
-    { id: "y604", label: "604", caption: "炀帝即位" },
-    { id: "y605", label: "605–610", caption: "运河建设 · 科举另论" },
-    { id: "y610", label: "610", caption: "经略流求" },
-    { id: "yUp",  label: "611+", caption: "农民起义" },
-    { id: "y612", label: "612–614", caption: "三征辽东" },
-    { id: "y615", label: "615", caption: "雁门之围" },
-    { id: "y618", label: "618", caption: "隋朝灭亡" }
+(function(){
+  /* ========== 课时节点 ========== */
+  const YEARS=[
+    {id:"y577",label:"577",caption:"北周灭北齐"},
+    {id:"y581",label:"581",caption:"杨坚建隋"},
+    {id:"y583",label:"583",caption:"迁都大兴"},
+    {id:"y589",label:"589",caption:"灭陈统一"},
+    {id:"y604",label:"604",caption:"开皇之治"},
+    {id:"y605",label:"605",caption:"炀帝继位"},
+    {id:"y607",label:"607",caption:"设进士科"},
+    {id:"y610",label:"610",caption:"运河贯通"},
+    {id:"y614",label:"612–14",caption:"三征高句丽"},
+    {id:"y615",label:"615",caption:"雁门之围"},
+    {id:"y618",label:"618",caption:"炀帝落幕"},
+    {id:"ySum",label:"总结",caption:"暴政速亡"},
+    {id:"yEnd",label:"讨论",caption:"课后活动"}
   ];
 
-  /** cards: each is nearly a full teaching page */
-  const CARDS = [
-    {
-      year: "y581",
-      tag: "book", tagText: "教材",
-      title: "杨坚代周建隋",
-      yearLine: "581 年",
-      body: `<p>北周末年，外戚<strong>杨坚</strong>执掌朝政。581 年，杨坚夺取北周政权，建立隋朝，<strong>仍以长安为都</strong>，是为隋文帝。</p>
-      <p>「仍」字很关键：他没有立刻迁都，而是先稳住关中根本。理解「执掌朝政」四字，才能理解后面的禅代如何实现——这次政权更替有此前掌握朝政与平定反对势力的背景。</p>
-      <p>国号「隋」。隋由此开启了一个与秦、汉并称「再造统一」的王朝，尽管它只存在了三十多年。</p>`
+  function scene(title,lead,points,eyebrow,prompt){
+    return {scene:true,title,lead,points,eyebrow:eyebrow||"阶段概述",prompt:prompt||"沿时间线继续展开。"};
+  }
+
+  /* SVG 地图：先全景修复，再局部放大 */
+  const MAP_STEPS={
+    y577:{
+      title:"577 · 北周吞并北齐",
+      sideH:"统一前夜的北方",
+      sideP:"北周武帝灭北齐，北方基本一体。此时南方仍有陈朝。杨坚出自北周外戚与关陇集团——统一的北方，已经为隋准备好了舞台。",
+      legend:[["#3d6f8a","北周（含原北齐）"],["#2f7d5c","陈"],["#c9d2da","其他 / 边地"]],
+      focus:"north",
+      actionLabel:"染色：北方并入北周",
+      zoomLabel:"放大中原",
+      steps:["读图例：谁在北方？","577 灭齐 → 北方一体","再看南方陈朝"]
     },
-    {
-      year: "y581",
-      tag: "extend", tagText: "拓展",
-      title: "关陇集团与禅代逻辑",
-      yearLine: "制度背景",
-      dark: true,
-      body: `<p>北周本身就出自关陇军事贵族集团，府兵制把胡汉将领与土地、部民绑在一起。杨坚是这一集团里最有权势的外戚。</p>
-      <p>代周不是「农民起义推翻旧朝」，而是<strong>同一统治集团内部的权力重组</strong>。这决定了隋初治理的特点：大量保留前朝官僚与制度资源，行政能迅速上手；同时也把关陇贵族的既得利益带进了新王朝。</p>
-      <p>后来的科举、律令改革，都要与这股力量周旋——这也是理解「为什么要从门第转向才识」的钥匙。</p>`
+    y581:{
+      title:"581 · 隋文帝建立隋朝",
+      sideH:"代周建隋",
+      sideP:"杨坚夺取北周政权，建立隋朝，仍以长安为都。北方政权换旗，但空间格局仍是「北强南弱」。",
+      legend:[["#c45c26","隋"],["#2f7d5c","陈"],["#c9d2da","其他"]],
+      focus:"north",
+      actionLabel:"染色：北方改旗为隋",
+      zoomLabel:"放大关中",
+      steps:["581 建隋","仍都长安（关中）","南方仍是陈"]
     },
-    {
-      year: "y583",
-      tag: "book", tagText: "教材",
-      title: "营建并迁都大兴城",
-      yearLine: "582 营建 → 583 迁都",
-      img: "assets/hero-sui-capital.png",
-      body: `<p>建立隋朝<strong>两年后</strong>，迁都大兴城，是为京师。大兴城在汉长安城东南重新规划营建，规模宏大、里坊整齐，是当时世界上规划水平极高的都城之一，也奠定了后来唐长安城的基本格局。</p>
-      <p>大兴城是在原有都城附近重新规划的新都；讲解时应区分 583 年迁都大兴与 605 年营建东都洛阳，不能把两次都城建设合成一件事。</p>
-      <p><strong>空间坐标：</strong>关中是根本，洛阳是枢纽，涿郡是北门，余杭是南粮——这套格局后来由大运河缝合。讲运河前可先在黑板画出这四点。</p>`
+    y583:{
+      title:"583 · 迁都大兴城",
+      sideH:"新都与空间坐标",
+      sideP:"两年后迁都大兴城。关中是根本，洛阳是枢纽，涿郡是北门，余杭是南粮——这四点后来由大运河缝合。",
+      legend:[["#c45c26","隋"],["#2f7d5c","陈"],["#c45c26","● 大兴"]],
+      focus:"daxing",
+      actionLabel:"标点：大兴城",
+      zoomLabel:"放大关中—洛阳",
+      steps:["先全景定位大兴","再放大看关中与洛阳关系","为运河叙事铺垫"]
     },
-    {
-      year: "y589",
-      tag: "book", tagText: "教材",
-      title: "陈后主与南朝末局",
-      yearLine: "589 年前",
-      body: `<p>当时南方陈朝的最后一个皇帝<strong>陈后主</strong>不问政事，沉迷享乐。朝廷上下文恬武嬉，长江天险并不能弥补政治与军力的双重衰败。</p>
-      <p>教材用寥寥数语，点出统一战争的现实基础：需要结合南北实力、政治状况和统一趋势分析。可让学生思考「天险为何挡不住隋军」。</p>`
-    },
-    {
-      year: "y589",
-      tag: "book", tagText: "教材 · 重点",
-      title: "渡江灭陈，全国一统",
-      yearLine: "589 年",
-      body: `<p>589 年，隋军<strong>渡过长江</strong>，灭掉陈朝，统一全国。从 581 建隋到 589 灭陈，前后约八年——隋没有在建国之初就盲目南征，而是先稳定内部、恢复国力，再完成统一。</p>
-      <p>这个节奏本身就是「文帝治理」的注脚：统一是结果，不是起点。</p>
-      <p><strong>意义（必须背熟）：</strong>结束了长期分裂局面，顺应了民族交融的大趋势，进一步促进了南北方经济、文化的交流和发展。后面的大运河、科举、律令，全部建立在「全国是一个政治—经济共同体」这个前提上。</p>`
-    },
-    {
-      year: "yKai",
-      tag: "book", tagText: "教材 · 总述",
-      title: "开皇之治：国力迅速恢复",
-      yearLine: "581–604 · 隋文帝",
-      img: "assets/wendi-court.png",
-      body: `<p>隋朝建立后，发展经济，编订户籍，核实户口，减轻百姓赋役负担，统一币制和度量衡；加强中央集权，修订和减省刑律，简化机构，提高行政效率。</p>
-      <p>隋朝经济迅速恢复和发展，<strong>人口数量和垦田面积大幅度增长</strong>，成为国力强盛的王朝。后世史家常以年号称之为「开皇之治」——教材未用此四字，但用「国力强盛的王朝」表达了同一判断。</p>
-      <p>下面几张卡片，逐条展开这套「国家操作系统」。左右翻页讲解。</p>`
-    },
-    {
-      year: "yKai",
-      tag: "book", tagText: "教材",
-      title: "编订户籍，核实户口",
-      yearLine: "开皇 · 经济",
-      body: `<p>教材顺序是：<strong>编订户籍，核实户口</strong>，然后才是<strong>减轻百姓赋役负担</strong>。顺序本身就是因果。</p>
-      <p>「编户」不是登记身份证那么简单，而是把每一个丁口绑定到均田与课役上：户口清了，税基才稳；税基稳了，才有条件减负。这一组动作是开皇国力的底层操作系统。</p>
-      <p><strong>课堂追问：</strong>如果户口不清，中央宣布「减负」会发生什么？——地方与豪强可以把负担转嫁给查不到的人，善意到不了民户。</p>`
-    },
-    {
-      year: "yKai",
-      tag: "extend", tagText: "拓展",
-      title: "大索貌阅（585）",
-      yearLine: "开皇 · 户籍手段",
-      body: `<p>「<strong>大索</strong>」是全面清查户口，「<strong>貌阅</strong>」是当面核对年龄体貌，防止「诈老诈小」逃避赋役。豪强荫庇的人口被重新纳入编户，国家税基显著扩大。</p>
-      <p>它回答的是教材「核实户口」里最关键的三个字——<em>怎么核</em>。</p>
-      <p><strong>方法提示：</strong>可让学生角色扮演：县官、豪强、逃户三方，在「没有貌阅」和「有貌阅」两种规则下分别会怎么做。制度设计课由此变得可感。</p>`
-    },
-    {
-      year: "yKai",
-      tag: "extend", tagText: "拓展",
-      title: "输籍定样",
-      yearLine: "开皇 · 赋役标准",
-      body: `<p>朝廷颁布统一的「输籍」样册，规定各等户的赋役标准并<strong>张榜公布</strong>。地方官不能随意抬高等级，豪强也难以上下其手。</p>
-      <p>它与大索貌阅配套：一个<strong>扩户口</strong>，一个<strong>定税则</strong>。没有定样，中央「减轻赋役」的善意到不了民户——这是理解「制度」而非「口号」的绝佳案例。</p>
-      <p><strong>一句话：</strong>大索貌阅解决「有多少人」，输籍定样解决「每人交多少」。</p>`
-    },
-    {
-      year: "yKai",
-      tag: "book", tagText: "教材",
-      title: "减轻赋役",
-      yearLine: "开皇 · 民生",
-      body: `<p>减轻百姓赋役负担，使社会生产得以恢复。与炀帝时期「每年都要征发大批劳动力」形成<strong>正反对照</strong>，是课后「隋速亡原因」的关键变量。</p>
-      <p><strong>课堂建议：</strong>讲完本页立刻问——「如果只许用一张表对比文帝与炀帝，你会画哪两列？」答案应落在「惜民力 / 不惜民力」，而不是简单「好皇帝 / 坏皇帝」。</p>`
-    },
-    {
-      year: "yKai",
-      tag: "book", tagText: "教材",
-      title: "统一币制和度量衡",
-      yearLine: "开皇 · 经济",
-      body: `<p>统一币制和度量衡，降低交易与财政成本，便利南北经济交流。与全国统一叠加后，跨区域市场才有可能真正运转。</p>
-      <p>这也是后来大运河能发挥「全国物流」功能的前提之一：没有统一的度量与货币，水道再通，交易成本仍然高企。</p>`
-    },
-    {
-      year: "yKai",
-      tag: "extend", tagText: "拓展",
-      title: "开皇律条文要点",
-      yearLine: "开皇 · 法律",
-      dark: true,
-      body: `<p>开皇元年（581）颁《开皇律》，三年修订：</p>
-      <p>① 条文大幅删减，定型<strong>十二篇</strong>；<br/>
-      ② 刑罚统一为笞、杖、徒、流、死<strong>五刑</strong>，废除枭首、轘裂等酷刑，死刑须复奏；<br/>
-      ③ 「十恶」入名例，谋反等不得赦免。</p>
-      <p>《开皇律》是后世《唐律疏议》的直接蓝本。教材「修订和减省刑律」六个字，展开就是一部中国法制史的枢纽——唐的「律令格式」站在隋的肩膀上。</p>`
-    },
-    {
-      year: "yKai",
-      tag: "extend", tagText: "拓展",
-      title: "中央行政分工的调整",
-      yearLine: "开皇 · 中央行政",
-      body: `<p>以简化示意理解中央行政分工：内史、门下、尚书等机构各有职责，尚书省分曹理事；隋唐之间机构名称与设置仍有变化。</p>
-      <p>分工明确，削弱权臣专权空间，提高行政效率——正对应教材「加强中央集权……简化机构，提高行政效率」。唐代在隋制基础上继续调整完善，不能把唐代成熟制度直接等同于隋初。</p>
-      <p><strong>一句话概括：</strong>在皇权统治下，通过机构分工处理国家事务。</p>`
-    },
-    {
-      year: "yKai", tag: "extend", tagText: "文献 · 空间联系",
-      title: "583 年置仓：治理与运输相互支撑",
-      yearLine: "583 年 · 文帝时期",
-      body: `<p>《隋书·食货志》记述设置黎阳、河阳、常平、广通等仓，转运粮食供应京师。这说明<strong>国家仓储与漕运并非从炀帝时才开始</strong>。</p><p>先有恢复生产、组织转运与仓储的基础，后有更大范围的运河网络。讲到 605—606 年回洛仓时，可回看这一页。</p><p class="evidence-source">依据：<a href="https://www.hnswwkgyjy.cn/NewsView.php?News_ID=270" target="_blank" rel="noopener noreferrer">河南省文物考古研究院研究说明 ↗</a></p>`
-    },
-    {
-      year: "yKai",
-      tag: "extend", tagText: "拓展",
-      title: "均田与租调役背景",
-      yearLine: "开皇 · 赋役制度",
-      body: `<p>隋大体承北朝均田传统：国家授田于民，受田者承担租（粮）、调（绢布）、役（力役/兵役）。教材写「减轻赋役」「编订户籍」，背后是这一国家—编户关系。唐前期仍基本沿用并完善。</p>
-      <p>理解「编户 → 课役 → 国力」链条，才能评价炀帝为何「不惜民力」会被视为亡国之征——他动的是整条链条的<strong>承重墙</strong>。</p>`
-    },
-    {
-      year: "y604",
-      tag: "book", tagText: "教材",
-      title: "营建东都洛阳",
-      yearLine: "604 即位 → 605 营建东都",
-      body: `<p>隋炀帝急功近利，不惜民力，每年都要征发大批劳动力，驱使他们<strong>营建东都洛阳</strong>……</p>
-      <p>洛阳居天下之中，便于控山东、江南并对接运河，战略上并不荒谬。但营建本身就是巨大民力支出。</p>
-      <p>教材把它写进「不惜民力」的清单，提示学生：评价一项工程，既要看<strong>目的</strong>是否合理，也要看<strong>动员方式</strong>是否透支社会。</p>`
-    },
-    {
-      year: "y604",
-      tag: "book", tagText: "教材",
-      title: "修筑长城和驰道",
-      yearLine: "604 年后",
-      body: `<p>驱使他们营建东都洛阳、开凿大运河、修筑长城和驰道。长城重在北防，驰道改善陆路，与运河同属「全国交通—防务工程包」。</p>
-      <p>问题不在单点，而在<strong>叠加</strong>：同一时期多项超大规模动员同时进行，编户丁壮被反复抽离田亩——这是「急功近利」的结构性含义。</p>`
-    },
-    {
-      year: "y604",
-      tag: "cost", tagText: "教材 · 代价",
-      title: "多次巡游与龙舟仪仗",
-      yearLine: "炀帝时期",
-      dark: true,
-      body: `<p>他多次巡游，乘坐高大华丽的龙舟，随行船只浩浩荡荡，仅拉纤民工就多达数十万，耗费大量人力和财力。</p>
-      <p>教材用「巡游耗费」与运河工程并置：同一组交通能力，既可运粮治国，也可运人夸耀。</p>
-      <p>这是本课最重要的一组对照——<strong>工具无罪，用法有价</strong>。讲运河时务必回扣本页。</p>`
-    },
-    {
-      year: "y604",
-      tag: "extend", tagText: "拓展",
-      title: "三下江南（江都之巡）",
-      yearLine: "605 · 610 · 616",
-      body: `<p>大业元年（605）、六年（610）、十二年（616）三次大规模南巡（史家统计口径略有差异，教材统称「多次巡游」）。船队绵延二百余里，挽船民夫、骑兵夹岸而行，沿途州县供顿极繁。</p>
-      <p>最后一次南巡后即<strong>滞留江都</strong>，618 年在那里被杀——南巡终点成了王朝终点。</p>
-      <p><strong>地图活动：</strong>请学生沿运河标出江都，为结尾埋线。</p>`
-    },
-    {
-      year: "y605",
-      tag: "book", tagText: "教材 · 重点",
-      title: "开通大运河",
-      yearLine: "605 年起 · 隋炀帝",
-      img: "assets/canal-sui.png",
-      wide: true,
-      body: `<p>为了加强南北交通，巩固隋朝对全国的统治，隋炀帝征发几百万人，从 605 年起，陆续开凿了一条贯通南北的大运河。</p>
-      <p><strong>走向：</strong>以<strong>洛阳</strong>为中心，北抵<strong>涿郡</strong>，南至<strong>余杭</strong>。<br/>
-      <strong>水系：</strong>连接海河、黄河、淮河、长江和钱塘江五大水系。<br/>
-      <strong>规模：</strong>全长 <strong>2700 多千米</strong>，是当时世界上最长的运河。</p>
-      <p><strong>作用：</strong>带动沿河城市的繁荣与发展，加强了南北地区政治、经济和文化的交流，有利于国家统一和民族交融。</p>`
-    },
-    {
-      year: "y605",
-      tag: "book", tagText: "教材 · 读图",
-      title: "四段河道",
-      yearLine: "读地图",
-      body: `<p>一般记作：</p>
-      <p><strong>永济渠</strong> — 涿郡方向<br/>
-      <strong>通济渠</strong> — 洛阳至淮水<br/>
-      <strong>邗沟</strong> — 淮水至江都<br/>
-      <strong>江南河</strong> — 江都至余杭</p>
-      <p>教材「读地图」要求指出四段，并找出端点与所连水系。课堂可请学生上台，沿「洛阳—涿郡」「洛阳—余杭」两条轴线标注。</p>`
-    },
-    {
-      year: "y605",
-      tag: "book", tagText: "教材 · 想一想",
-      title: "为何是南北走向",
-      yearLine: "地理思考",
-      body: `<p>我国地势<strong>西高东低</strong>，主要河流多自西向东流。为什么大运河是南北走向？</p>
-      <p>因为大一统帝国需要把政治中心（洛阳/关中）与江南粮仓、幽燕防务用水路缝合起来——东西向的天然水道做不到这件事。</p>
-      <p>人工运河补的是<strong>国家治理所需的南北物流</strong>，不是自然地理的延长线。这道题考的是「国家需求」而不是「水往低处流」。</p>`
-    },
-    {
-      year: "y605",
-      tag: "extend", tagText: "拓展",
-      title: "漕运与转漕",
-      yearLine: "运河的国家功能",
-      body: `<p>「漕」指国家组织的水路粮运。江南粮经运河汇集洛阳，再转输关中，称为<strong>转漕</strong>。</p>
-      <p>运河不只是观光水道，而是帝国粮食供应链的大动脉——理解了这一点，才能理解教材为何把它写进「巩固统治」而不是「奇观工程」。</p>
-      <p>回洛仓服务东都洛阳，黎阳仓承担中转功能。将运河、漕运与这两处隋代粮仓的遗址资料连起来观察。</p>`
-    },
-    {
-      year: "y605",
-      tag: "book", tagText: "教材 · 引诗",
-      title: "皮日休如何评价运河",
-      yearLine: "唐人反思",
-      dark: true,
-      body: `<p>「尽道隋亡为此河，至今千里赖通波。若无水殿龙舟事，共禹论功不较多。」</p>
-      <p>唐人皮日休承认运河利在千里的同时，把「亡隋」责任指向<strong>龙舟巡游的奢靡</strong>，而不是运河本身。</p>
-      <p><strong>课堂活动：</strong>让学生改写一句——如果你是皮日休，会把「功」和「过」分别记在谁头上？</p>
-      <p><strong>评价框架：</strong>短期成本（征发、民苦）/ 长期收益（南北通道，后世长期依赖）要分开说。</p>`
-    },
-    {
-      year: "y605",
-      tag: "book", tagText: "教材 · 重点",
-      title: "开创科举取士制度",
-      yearLine: "文帝 → 炀帝",
-      img: "assets/keju-sui.png",
-      wide: true,
-      body: `<p>魏晋南北朝时期，官员的选拔权由上层权贵掌控，选官看重<strong>门第</strong>，不太注重才识。世家大族子弟垄断了官场中的中高级职位，平民子弟很难晋升。</p>
-      <p>隋文帝即位后，废除了前朝的选官制度，<strong>依才能取士</strong>。隋炀帝时，设置<strong>进士科</strong>，标志着通过考试选拔人才的<strong>科举制创立</strong>。</p>`
-    },
-    {
-      year: "y605",
-      tag: "book", tagText: "教材 · 重点",
-      title: "科举制的历史意义",
-      yearLine: "选官革命",
-      body: `<p>科举制度是我国古代选官制度的<strong>重大变革</strong>。它的延续和完善，加强了朝廷在选官上的权力，使通过考试选拔官员的用人制度逐渐确立。</p>
-      <p>它不仅<strong>扩大了统治基础</strong>，对<strong>社会阶层流动</strong>也起到积极作用，还显著提高了整个官僚队伍的<strong>文化素养</strong>。此后，科举制成为历朝选拔官员的主要制度，一直延续了约 <strong>1300 年</strong>。</p>
-      <p><strong>课后活动 1 标准答法：</strong>权力集中 · 阶层流动 · 官僚文化素养。</p>`
-    },
-    {
-      year: "y605",
-      tag: "extend", tagText: "拓展",
-      title: "九品中正制为何被废",
-      yearLine: "选官史前史",
-      body: `<p>九品中正制由曹魏确立：中正品评人物为九品，授官以家世、状品为要。运行日久，「上品无寒门，下品无势族」，中央难以真正按才授官。</p>
-      <p>隋统一后需要更直接的国家选才通道。这是教材「选官看重门第 → 依才能取士」背后的制度史前史。</p>
-      <p><strong>脉络：</strong>察举 → 九品中正 → 科举。用一条时间线画给学生看。</p>`
-    },
-    {
-      year: "y605",
-      tag: "extend", tagText: "拓展",
-      title: "隋唐科举演变线索",
-      yearLine: "制度延伸",
-      body: `<p><strong>隋：</strong>文帝分科考试取士 → 炀帝置进士科。<br/>
-      <strong>唐：</strong>科目增多（进士、明经等），程序逐渐严密，成为士人入仕主渠道。<br/>
-      <strong>宋以后：</strong>糊名、誊录等使考试更严密。</p>
-      <p>初中只需掌握「隋创立、约 1300 年」；本卡用于建立选拔史时间感，不必展开考试科目表。</p>`
-    },
-    {
-      year: "y610",
-      tag: "book", tagText: "教材 · 相关史事",
-      title: "经略流求（台湾）",
-      yearLine: "610 年",
-      body: `<p>隋朝称今天的台湾为流求。隋炀帝即位不久，先后<strong>三次</strong>派人前往流求，其中第三次是在 <strong>610 年</strong>。隋炀帝派武将文臣率领一万多人，从<strong>义安</strong>出发，渡海抵达流求，加强了与流求的联系。</p>
-      <p>隋朝对台湾地区的认识比以往前进了一大步。《隋书》中有对流求的专门记载，详细记述了这一地区地理、物产、社会组织、饮食、服饰、习俗等各方面的情况。</p>
-      <p><strong>对板对比：</strong>流求 = 经略与认识；辽东 = 战争与透支。性质完全不同。</p>`
-    },
-    {
-      year: "yUp",
-      tag: "book", tagText: "教材",
-      title: "起义为何从山东爆发",
-      yearLine: "约 611 年起",
-      body: `<p>起义首先爆发在深受徭役、兵役之苦的今<strong>山东地区</strong>，随即迅速扩展到全国。各地形成了许多反隋队伍，一些隋朝官员也趁机起事。</p>
-      <p>地理与战争相关：三征辽东的物资与兵员转运，山东是前线后勤带，压力最先到达编户。</p>
-      <p><strong>地图活动：</strong>把「山东—辽东」连成一条线，学生立刻能看见「苦役带」。</p>`
-    },
-    {
-      year: "yUp",
-      tag: "book", tagText: "教材 · 相关史事",
-      title: "福手福足与煮土而食",
-      yearLine: "末世惨状",
-      dark: true,
-      body: `<p>隋朝末年，许多老百姓为逃避徭役和兵役，被迫采用断手断足的方式，时称「<strong>福手福足</strong>」。因严重饥荒又得不到赈济，有的地区百姓连草根树皮也找不到，只好「煮土而食」。</p>
-      <p>起义军在发布的檄文中，痛斥隋炀帝：「<strong>罄南山之竹，书罪无穷；决东海之波，流恶难尽。</strong>」——「罄竹难书」的典故即出于此类檄文语境。</p>`
-    },
-    {
-      year: "yUp",
-      tag: "book", tagText: "教材 · 材料研读",
-      title: "《旧唐书·李密传》",
-      yearLine: "史料分析",
-      body: `<p>「父母不保其赤子，夫妻相弃于匡床，万户则城郭空虚，千里则烟火断灭。」——《旧唐书·李密传》。</p>
-      <p><strong>设问：</strong>为什么隋朝末年会出现这样的状况？</p>
-      <p><strong>作答方向：</strong>连年大工程与征辽 → 丁壮远役、田地荒芜 → 饥馑与家庭解体 → 千里萧条。</p>
-      <p>可让学生用箭头在纸上画出这条因果链，再对照教材「民不聊生，社会矛盾激化」。</p>`
-    },
-    {
-      year: "yUp",
-      tag: "cost", tagText: "教材 · 代价",
-      title: "暴政与民不聊生",
-      yearLine: "因果链",
-      body: `<p>教材因果链非常清晰：</p>
-      <p>隋炀帝急功近利、不惜民力 → 每年征发大批劳动力 → 百姓无法正常从事生产劳动 → <strong>民不聊生，社会矛盾激化</strong> → 大规模农民起义。</p>
-      <p>讲这一页时，建议用左侧进度条跳回「开皇」的「减轻赋役」卡片——同一帝国，两代君主，两种动员伦理。</p>`
-    },
-    {
-      year: "y612",
-      tag: "book", tagText: "教材",
-      title: "三次征辽东",
-      yearLine: "612–614",
-      body: `<p>隋炀帝还<strong>三次征辽东</strong>，役使大量农民，百姓无法正常从事生产劳动，民不聊生，社会矛盾激化。</p>
-      <p>与营东都、开运河、修长城驰道、巡游叠加，构成「不惜民力」的完整清单；直接推动起义。</p>`
-    },
-    {
-      year: "y612",
-      tag: "extend", tagText: "拓展",
-      title: "三征高句丽始末",
-      yearLine: "战役细节",
-      body: `<p>教材称「三次征辽东」，对手主要是辽东、朝鲜半岛北部的<strong>高句丽</strong>（「三征朝鲜」是通俗说法）。</p>
-      <p><strong>612：</strong>大规模出兵，宇文述等率陆军深入，于萨水（清川江）大败。<br/>
-      <strong>613：</strong>再举兵，因杨玄感起兵后方被迫撤军。<br/>
-      <strong>614：</strong>国内已乱，高句丽也疲敝请降，炀帝班师——得一纸降表，国力已近耗竭。</p>`
-    },
-    {
-      year: "y612",
-      tag: "extend", tagText: "拓展",
-      title: "杨玄感起兵（613）",
-      yearLine: "精英叛离",
-      body: `<p>杨玄感，开国重臣杨素之子。二征高句丽时他在黎阳督运粮草，趁后方空虚起兵，达官子弟多有响应。兵败被杀后，炀帝穷究党与，大开杀戒。</p>
-      <p>意义：此前起义多是编户民变，杨玄感是<strong>统治集团内部</strong>公开反叛——对应教材「一些隋朝官员也趁机起事」，是隋亡从民变升级为全面崩溃的关键节点。</p>`
-    },
-    {
-      year: "y612",
-      tag: "extend", tagText: "拓展",
-      title: "府兵制与征发",
-      yearLine: "军事制度",
-      body: `<p>隋唐前期行府兵制：兵农合一，府兵番上宿卫或出征。大规模征辽东需动员编户丁男，与均田编户、赋役制度绑定。</p>
-      <p>这解释了教材「役使大量农民，百姓无法正常从事生产劳动」为何会直接击穿农业与社会秩序——战争抽的是生产系统的人，不只是军队。</p>`
-    },
-    {
-      year: "y615",
-      tag: "extend", tagText: "拓展",
-      title: "雁门之围",
-      yearLine: "615 年",
-      img: "assets/yanmen-siege.png",
-      wide: true,
-      body: `<p>大业十一年（615）八月，隋炀帝北巡塞外，东突厥始毕可汗率数十万骑将其围困于<strong>雁门</strong>（今山西代县一带）。城中军民粮食仅支二十日；隋廷召集援军，并向义成公主求援；公主告知始毕可汗北方有急，促使其撤围。</p>
-      <p>此后炀帝惧北疆，再未有效控驭边军，加速了地方势力离心。</p>
-      <p>三征辽东劳师于东，雁门又被困于北——<strong>对外两线透支</strong>，中央威信在围城中被公开戳破。教材未载，但是极好的中间环。</p>`
-    },
-    {
-      year: "y618",
-      tag: "book", tagText: "教材 · 重点",
-      title: "618 年隋亡",
-      yearLine: "618 年 · 江都",
-      img: "assets/fall-sui.png",
-      wide: true,
-      body: `<p>在起义军和反隋势力的打击下，隋朝的统治濒临崩溃。<strong>618 年</strong>，隋炀帝在<strong>江都</strong>被部下杀死，盛极一时的隋朝随之灭亡。</p>
-      <p>从 581 到 618，约 37 年（首尾涉及 38 个公历年份）。统一、制度建设与过度征发的代价，贯穿这个短暂王朝。</p>`
-    },
-    {
-      year: "y618",
-      tag: "book", tagText: "教材 · 课后活动",
-      title: "罗隐《炀帝陵》",
-      yearLine: "议一议",
-      dark: true,
-      body: `<p>「君王忍把平陈业，只换雷塘数亩田。」</p>
-      <p><strong>议一议：</strong>隋炀帝为什么会落得如此下场？隋朝速亡的原因是什么？</p>
-      <p><strong>标准作答骨架：</strong><br/>
-      ① 急功近利、滥用民力（营东都、开运河、修长城驰道、巡游、三征辽东）；<br/>
-      ② 生产破坏、民不聊生；<br/>
-      ③ 起义与反隋势力合力。</p>`
-    },
-    {
-      year: "y618",
-      tag: "extend", tagText: "拓展",
-      title: "秦隋对照",
-      yearLine: "结构比较",
-      body: `<p>秦、隋常被并称：皆结束长期分裂、皆有大型国家工程、皆短期制度创新（郡县 / 科举与运河）、皆二世而亡，并为后续强盛王朝（汉、唐）铺路。</p>
-      <p>对照有助于把「统一—建设—透支—崩溃」抽象成可迁移的历史结构；答题时仍须先立足教材材料。</p>`
-    },
-    {
-      year: "y618",
-      tag: "book", tagText: "课堂收束",
-      title: "一句话主线",
-      yearLine: "总结",
-      body: `<p>隋用制度与工程把分裂的中国重新缝合，并留下运河、科举、律令这些「唐所继承」的遗产；又因把同一套动员能力用到透支，三十余年而亡。</p>
-      <p>繁荣与开放的时代，是从这份<strong>遗产与教训</strong>里长出来的。</p>
-      <p><strong>讨论题：</strong>① 科举对社会的影响？② 隋速亡原因？③ 如何评价大运河功过？④【拓展】同一套国家能力，文帝与炀帝为何结出相反果实？</p>`
+    y589:{
+      title:"589 · 过长江，统一陈朝",
+      sideH:"分裂的结束",
+      sideP:"隋军渡过长江，灭陈，统一全国。意义：结束长期分裂，顺应民族交融，促进南北经济文化交流。",
+      legend:[["#c45c26","隋（统一后）"],["#c9d2da","边地"]],
+      focus:"all",
+      actionLabel:"染色：全国统一",
+      zoomLabel:"放大江淮",
+      steps:["589 渡江","南方并入隋","统一成为后续建设前提"]
     }
-  ];
-
-  // Open compositions introduce each period; cards are reserved for close reading.
-  const CHAPTERS = [
-    ["一个短暂的王朝，<br/>如何影响千年？", "从统一到兴盛，再到灭亡。沿着三条线索，认识隋朝。", [["01 · 统一", "结束分裂", "581 建隋 → 589 统一"], ["02 · 建设", "重建秩序", "开皇之治 · 大运河 · 科举"], ["03 · 兴亡", "留下追问", "民力与国力，如何保持平衡？"]]],
-    ["一座新都，<br/>承载统一的布局。", "从政权建立走向国家建设，把都城放回历史的空间中。", [["关中", "根本", "大兴城"], ["洛阳", "枢纽", "连接东西"], ["南北", "联系", "为理解运河建立空间坐标"]]],
-    ["从分裂，<br/>走向一统。", "589 年，隋灭陈，统一全国。统一之后的建设，由此成为可能。", [["背景", "长期分裂", "南北对峙"], ["转折", "渡江灭陈", "589 年"], ["意义", "交流发展", "促进南北经济、文化交流"]]],
-    ["国力的恢复，<br/>从百姓的生产开始。", "回看 581—604 年：文帝治理贯穿统一前后。“开皇”年号为 581—600 年，随后改元仁寿。", [["经济", "恢复生产", "户籍 · 赋役 · 币制与度量衡"], ["政治", "提高效率", "刑律 · 机构 · 中央集权"], ["结果", "国力增强", "人口与垦田面积增长"]]],
-    ["宏大的建设，<br/>也有沉重的代价。", "604 年即位是转折点；下面回顾此后多年的工程、征发与巡游，并非都发生在 604 年。", [["建设", "营建东都", "洛阳"], ["工程", "长城驰道", "持续征发劳动力"], ["追问", "民力几何？", "建设规模与百姓负担"]]],
-    ["两项创举，<br/>改变中国的连接方式。", "605—610 年陆续建设运河；科举标“隋炀帝时”。两者并列比较，不表示同时发生。", [["空间", "大运河", "南北交通与经济交流"], ["人才", "科举制", "通过考试选拔人才"], ["评价", "功与过", "长期影响与短期代价"]]],
-    ["把视线，<br/>投向海峡。", "610 年的经略流求，是本课观察隋朝对外联系的一个节点。", [["出发", "义安", "渡海前往流求"], ["联系", "往来", "加强对这一地区的认识"], ["材料", "《隋书》", "关注地理与社会生活的记载"]]],
-    ["当征发压过生产，<br/>社会开始失衡。", "从百姓的处境出发，理解隋末起义的原因。", [["压力", "徭役兵役", "劳动力离开生产"], ["生活", "民不聊生", "社会矛盾激化"], ["反应", "起义扩展", "从山东到全国"]]],
-    ["连年战争，<br/>进一步消耗国力。", "612—614 年，三次征辽东。将战争放回工程与征役的整体背景。", [["612", "第一次", "大规模军事动员"], ["613", "第二次", "后方发生杨玄感起兵"], ["614", "第三次", "国力进一步耗损"]]],
-    ["边疆的危机，<br/>映照统治的困境。", "615 年雁门之围，作为理解隋末形势的拓展材料。", [["处境", "北巡被围", "雁门"], ["背景", "内外交困", "战争与民变叠加"], ["思考", "中央威信", "危机如何影响统治？"]]],
-    ["王朝落幕，<br/>历史并未结束。", "618 年，隋炀帝在江都被杀。回到开篇：短暂王朝留下了什么？", [["结局", "隋朝灭亡", "618 年 · 江都"], ["遗产", "统一与制度", "运河 · 科举"], ["教训", "珍惜民力", "从兴盛与速亡中寻找原因"]]]
-  ];
-  function overview(i) {
-    const [title, lead, points] = CHAPTERS[i];
-    return { scene: true, title, lead, points, eyebrow: i === 0 ? "全课总览 / 三条主线" : "阶段概述 / " + YEARS[i].caption };
-  }
-  const RECAP = { scene: true, summary: true, eyebrow: "全课回顾 / 回答开篇的问题", title: "统一是起点，<br/>民力决定兴亡。", lead: "隋朝留下了制度与工程的遗产，也留下了过度征发的教训。", points: [["统一", "结束分裂", "581 建立隋朝 · 589 统一全国"], ["建设", "影响后世", "开皇之治 · 大运河 · 科举制"], ["兴亡", "以史为鉴", "滥用民力 → 社会矛盾 → 隋朝灭亡"]] };
-  function sceneMarkup(c) {
-    return '<article class="chapter-scene' + (c.summary ? ' recap-scene' : '') + '"><p class="scene-eyebrow">' + c.eyebrow + '</p><h2>' + c.title + '</h2><p class="scene-lead">' + c.lead + '</p><div class="scene-points">' + c.points.map((p, i) => '<div class="scene-point" style="--order:' + i + '"><span>' + p[0] + '</span><h3>' + p[1] + '</h3><p>' + p[2] + '</p></div>').join('') + '</div><p class="scene-prompt">' + (c.summary ? '想一想：如何评价大运河的功与过？' : '沿着时间线，继续展开这段历史。') + '</p></article>';
-  }
-
-  /* —— state —— */
-  let yi = 0;   // year index
-  let ci = 0;   // card index within year (global index into filtered)
-  let filtered = [];
-
-  const el = {
-    railTrack: document.getElementById("railTrack"),
-    yearUp: document.getElementById("yearUp"),
-    yearDown: document.getElementById("yearDown"),
-    slides: document.getElementById("slides"),
-    cardPrev: document.getElementById("cardPrev"),
-    cardNext: document.getElementById("cardNext"),
-    dots: document.getElementById("dots"),
-    kicker: document.getElementById("stageKicker"),
-    count: document.getElementById("stageCount"),
-    hint: document.getElementById("periodHint"),
-    intro: document.getElementById("intro"),
-    startBtn: document.getElementById("startBtn")
   };
 
-  /* —— build rail —— */
-  function buildRail() {
-    YEARS.forEach((y, i) => {
-      const n = document.createElement("button");
-      n.type = "button";
-      n.className = "year-node";
-      n.dataset.i = String(i);
-      n.setAttribute("aria-label", y.label + " · " + y.caption);
-      n.innerHTML = '<span class="time-tick" aria-hidden="true"></span><span class="year-label">' + y.label + '</span>';
-      n.title = y.label + ' · ' + y.caption;
-      n.addEventListener("click", () => goYear(i, true));
+  function mapCard(yearId){
+    return {map:true,yearId,title:MAP_STEPS[yearId].title};
+  }
+
+  /* ========== 全部页面 ========== */
+  const PAGES={
+    y577:[
+      scene("北周吞并北齐，<br/>北方走到了统一前夜。","577 年，北周灭北齐。分裂中的北方率先完成整合——杨坚将在这个舞台上登场。",[
+        ["北方","一体","北周灭北齐"],["格局","北强南弱","南方仍有陈"],["集团","关陇","府兵 · 贵族网络"]
+      ],"577 · 地图染色演示"),
+      mapCard("y577")
+    ],
+    y581:[
+      scene("581 年，杨坚建隋。<br/>王朝只有 37 年。","从外戚执掌朝政，到代周建隋——统一的接力棒交到了隋文帝手中。",[
+        ["581","建隋","杨坚 · 隋文帝"],["都城","长安","关中根本"],["寿命","约 37 年","581—618"]
+      ],"581 · 建立隋朝"),
+      mapCard("y581"),
+      {tag:"book",tagText:"教材",title:"杨坚代周",yearLine:"581 年",body:`<p>北周末年，外戚<strong>杨坚</strong>执掌朝政。581 年，杨坚夺取北周政权，建立隋朝，仍以长安为都，是为隋文帝。</p><p>这次政权更替有此前掌握朝政与平定反对势力的背景，为迅速恢复行政、推进统一创造了条件。</p>`}
+    ],
+    y583:[
+      scene("一座新都，<br/>画出帝国的空间坐标。","583 年迁都大兴城。都城不是风景，而是统治的锚点。",[
+        ["关中","根本","大兴城"],["洛阳","枢纽","连接东西"],["南北","待缝合","后来交给运河"]
+      ],"583 · 迁都大兴"),
+      mapCard("y583"),
+      {tag:"book",tagText:"教材",title:"营建并迁都大兴城",yearLine:"582 营建 → 583 迁都",img:"assets/hero-sui-capital.png",body:`<p>建立隋朝<strong>两年后</strong>，迁都大兴城，是为京师。大兴城在汉长安城东南重新规划营建，也奠定了后来唐长安城的基本格局。</p><p>讲解时应区分 583 年迁都大兴与 605 年营建东都洛阳，不能把两次都城建设合成一件事。</p>`}
+    ],
+    y589:[
+      scene("从分裂，<br/>走向一统。","589 年，隋灭陈。统一之后，大规模制度与工程才有可能。",[
+        ["背景","长期分裂","南北对峙"],["转折","渡江灭陈","589 年"],["意义","交流发展","促进南北经济文化"]
+      ],"589 · 灭陈统一"),
+      mapCard("y589"),
+      {tag:"book",tagText:"教材 · 重点",title:"统一全国的历史意义",yearLine:"589 年",body:`<p>隋的统一，结束了<strong>长期分裂</strong>局面，顺应了<strong>民族交融</strong>的大趋势，进一步促进了<strong>南北方经济、文化的交流和发展</strong>。</p><p>后面的大运河、科举、律令，全部建立在「全国是一个政治—经济共同体」这个前提上。</p>`}
+    ],
+    y604:[
+      scene("开皇之治：<br/>把国家装进制度里。","604 年文帝去世前，隋已国力强盛。回看 581—604：制度是看不见的运河。",[
+        ["中央","三省六部","决策 · 审议 · 执行"],["军事","府兵制","兵农合一"],["经济","均田租调","户籍 · 课役"]
+      ],"604 · 总结开皇之治"),
+      {tag:"book",tagText:"教材 · 总述",title:"国力迅速恢复",yearLine:"581–604 · 隋文帝",img:"assets/wendi-court.png",body:`<p>隋朝建立后，发展经济，编订户籍，核实户口，减轻百姓赋役负担，统一币制和度量衡；加强中央集权，修订和减省刑律，简化机构，提高行政效率。</p><p>人口数量和垦田面积大幅度增长，成为<strong>国力强盛</strong>的王朝。下面四页展开制度骨架。</p>`},
+      {tag:"extend",tagText:"拓展 · 1/2",title:"三省六部：决策如何被拆开",yearLine:"中央行政",body:`<p><strong>中书（内史）省</strong>草拟诏令 → <strong>门下省</strong>审核封驳 → <strong>尚书省</strong>执行，下设吏、户、礼、兵、刑、工六部。</p><p>把「一个人说了算」拆成「一套流程说了算」：权臣更难独揽，行政效率提高。唐承隋制，沿用近三百年。</p>`},
+      {tag:"extend",tagText:"拓展 · 2/2",title:"三省六部的影响",yearLine:"对后世",body:`<p>① <strong>皇权加强</strong>：相权被分割；② <strong>专业分工</strong>：六部对口处理政务；③ <strong>可预期性</strong>：诏令有审核环节，减少朝令夕改。</p><p>可让学生用一句话概括：决策、审议、执行，互相牵制又互相配合。</p>`},
+      {tag:"extend",tagText:"拓展",title:"府兵制：兵从哪里来",yearLine:"军事制度",body:`<p>兵农合一：府兵番上宿卫或出征，军资自备度较高。它支撑了统一战争与边防，也把兵役负担压在编户丁男身上。</p><p>后来炀帝大规模征辽，正是从这套编户—府兵链条上抽人——战争抽的是生产系统的人，不只是军队。</p>`},
+      {tag:"extend",tagText:"拓展",title:"均田与租调制：国家与编户的合同",yearLine:"经济制度",body:`<p>国家授田于民，受田者承担<strong>租</strong>（粮）、<strong>调</strong>（绢布）、<strong>役</strong>（力役/兵役）。配套手段：大索貌阅查户口，输籍定样定税则。</p><p>教材「减轻赋役」「编订户籍」背后是这一国家—编户关系。炀帝「不惜民力」，动的是这条承重墙。</p>`},
+      {tag:"extend",tagText:"拓展",title:"开皇律：减省刑律",yearLine:"法律",body:`<p>条文大幅删减，定型十二篇；刑罚统一为笞、杖、徒、流、死<strong>五刑</strong>，废除枭首、轘裂等酷刑；「十恶」入名例。</p><p>《开皇律》是《唐律疏议》的直接蓝本。教材「修订和减省刑律」六个字，展开就是中国法制史的枢纽。</p>`}
+    ],
+    y605:[
+      scene("604—605：皇权交接。<br/>宏大的建设，也从这里提速。","炀帝即位是转折点。宫廷斗争塑造了他的统治风格；随后是东都、运河、巡游与远征。",[
+        ["即位","604–605","从太子到天子"],["风格","急功近利","不惜民力"],["遗产","国力底座","开皇留下的动员力"]
+      ],"605 · 炀帝继位"),
+      {tag:"extend",tagText:"拓展",title:"宫廷斗争与统治心理",yearLine:"604–605",body:`<p>教材写「急功近利，不惜民力」。拓展理解：炀帝在夺嫡与即位过程中依赖权术与军事威慑，即位后更倾向<strong>以宏大工程证明合法性</strong>——营东都、开运河、巡行天下、远征高丽，都是「展示帝国」的剧本。</p><p>课堂提示：心理分析要克制，落点应是<strong>决策模式</strong>（高动员、短反馈、拒绝收缩），而不是给人物贴标签。</p>`},
+      {tag:"book",tagText:"教材",title:"营东都、修长城驰道",yearLine:"604 年后",body:`<p>隋炀帝急功近利，不惜民力，每年都要征发大批劳动力，驱使他们营建东都洛阳、开凿大运河、修筑长城和驰道。</p><p>问题不在单点，而在<strong>叠加</strong>：多项超大规模动员同时进行，编户丁壮被反复抽离田亩。</p>`}
+    ],
+    y607:[
+      scene("从门第到才识：<br/>进士科把考试写进帝国制度。","承文帝废九品中正、依才能取士；炀帝设进士科，科举制创立。",[
+        ["背景","门第选官","上品无寒门"],["转折","进士科","考试选才"],["影响","约 1300 年","历朝主渠道"]
+      ],"607 · 科举（教材作「隋炀帝时」）"),
+      {tag:"book",tagText:"教材 · 重点",title:"开创科举取士制度",yearLine:"文帝改革 → 炀帝置进士科",img:"assets/keju-sui.png",body:`<p>魏晋南北朝选官看重<strong>门第</strong>。隋文帝废除前朝选官制度，<strong>依才能取士</strong>。隋炀帝时，设置<strong>进士科</strong>，标志着通过考试选拔人才的<strong>科举制创立</strong>。</p><p>本课把进士科放在 607 前后叙事段，便于与运河、征辽并列比较；教材表述为「隋炀帝时」，不与单一年份硬绑。</p>`},
+      {tag:"book",tagText:"教材",title:"考什么：从诗赋时务到程序",yearLine:"考试内容 · 拓展可讲",body:`<p>隋唐进士科重<strong>诗赋与时务策</strong>，兼及经义（后世科目有变）。程序由简到繁：投牒自荐/学校举送 → 考试 → 授官。</p><p>课堂不必背科目表，抓住一点即可：<strong>把「会不会考试」变成入仕的重要门槛</strong>，门第垄断被打开缺口。</p>`},
+      {tag:"book",tagText:"教材 · 重点",title:"科举的影响",yearLine:"选官革命",body:`<p>加强朝廷选官权力；扩大统治基础；促进社会阶层流动；提高官僚队伍文化素养。此后成为历朝主要选官制度，延续约 <strong>1300 年</strong>。</p><p>课后活动 1 可按「权力 · 流动 · 素质」三点作答。</p>`}
+    ],
+    y610:[
+      scene("大运河全线贯通。<br/>两下江南，把帝国缝成一条线。","605 起开凿，610 前后全线贯通；炀帝 605、610 两下江南。运河既是物流，也是权力的展示通道。",[
+        ["线路","洛阳中心","北涿郡 · 南余杭"],["功能","漕运","高效低损耗转运"],["代价","征发","人力与财政"]
+      ],"610 · 运河 · 两下江南"),
+      {tag:"book",tagText:"教材 · 重点",title:"开通大运河",yearLine:"605 起 · 610 全线",img:"assets/canal-sui.png",wide:true,body:`<p>以<strong>洛阳</strong>为中心，北抵<strong>涿郡</strong>，南至<strong>余杭</strong>，连接海河、黄河、淮河、长江、钱塘江五大水系，全长 <strong>2700 多千米</strong>，当时世界最长。</p><p>作用：带动沿河城市，加强南北政治经济文化交流，有利于国家统一与民族交融。</p>`},
+      {tag:"book",tagText:"教材 · 读图",title:"运河线路示意",yearLine:"四段",body:`<p><strong>永济渠</strong>（涿郡—洛阳向）· <strong>通济渠</strong>（洛阳—淮）· <strong>邗沟</strong>（淮—江都）· <strong>江南河</strong>（江都—余杭）。</p><p>可让学生上台沿两条轴线标注：洛阳—涿郡、洛阳—余杭。</p>`},
+      {tag:"extend",tagText:"拓展",title:"南北交流：缝合的是什么",yearLine:"意义",body:`<p>政治军事重心偏北，经济重心逐渐南移。东西大河之间缺的是<strong>南北缝合</strong>——运河补的就是国家治理所需的南北物流。</p><p>皮日休：「尽道隋亡为此河，至今千里赖通波。」长期收益与短期征发要分开评价。</p>`},
+      {tag:"extend",tagText:"拓展",title:"漕运系统与军事准备",yearLine:"高效低损耗",body:`<p>漕运是国家组织的水路粮运：江南粮 → 运河 → 洛阳仓（如回洛仓）→ 转输关中或前线。相对陆运，损耗更低、运量更大。</p><p>同一网络也服务<strong>军事动员</strong>：粮秣、兵员、诏令的南北调度。运河是供应系统，也是战争基础设施——这解释了后来征辽的后勤依赖。</p>`},
+      {tag:"extend",tagText:"拓展",title:"两下江南（605、610）",yearLine:"巡游",body:`<p>大业元年（605）、大业六年（610）两次大规模南巡（教材统称多次巡游）。船队绵延，挽船民工数十万。</p><p>610 前后运河全线贯通，南巡既夸耀统一，也是对运河运力的极限压力测试。最后一次 616 南巡后滞留江都，618 年在那里被杀。</p>`}
+    ],
+    y614:[
+      scene("三征高句丽：<br/>动员机器开到极限。","612—614 三次东征。恐怖徭役、难以为继的底层、统治离心、起义云集——隋的崩溃是叠加出来的。",[
+        ["战争","三征辽东","612 · 613 · 614"],["底层","徭役恐怖","福手福足 · 煮土而食"],["上层","离心","杨玄感 · 官员起事"]
+      ],"614 · 三征与起义"),
+      {tag:"book",tagText:"教材",title:"三次征辽东",yearLine:"612–614",body:`<p>隋炀帝三次征辽东，役使大量农民，百姓无法正常从事生产劳动，民不聊生，社会矛盾激化。</p><p>对手主要是<strong>高句丽</strong>。613 年因杨玄感起兵，第二次被迫撤军。</p>`},
+      {tag:"cost",tagText:"教材 · 代价",title:"恐怖徭役与底层百姓",yearLine:"末世",body:`<p>「福手福足」逃役自残；饥荒「煮土而食」。檄文：「罄南山之竹，书罪无穷；决东海之波，流恶难尽。」</p><p>《旧唐书·李密传》：「万户则城郭空虚，千里则烟火断灭。」——连年征发使丁壮远役、田地荒芜。</p>`},
+      {tag:"extend",tagText:"拓展",title:"统治阶层离心离德",yearLine:"精英叛离",body:`<p><strong>杨玄感</strong>（杨素之子）613 年黎阳起兵，达官子弟多响应——从民变升级为<strong>统治集团内部</strong>公开反叛。</p><p>教材「一些隋朝官员也趁机起事」。皇帝失去核心精英支持，崩溃进入快车道。</p>`},
+      {tag:"cost",tagText:"教材",title:"云集响应的起义",yearLine:"611 起",body:`<p>起义首先爆发在深受徭役、兵役之苦的今<strong>山东</strong>地区，迅速扩展全国。各地形成许多反隋队伍。</p><p>时间关系：611 起义已现，612—614 战争继续加压——不要把起义说成战争结束后才发生。</p>`}
+    ],
+    y615:[
+      scene("雁门之围：<br/>滞后的军力，被现实击碎。","615 年北巡被东突厥围困。对外两线透支后，中央威信在边塞公开破产。",[
+        ["处境","被围雁门","粮食仅支约二十日"],["背景","军力滞后","东征未了 · 北线又危"],["后果","威信扫地","边军与地方离心"]
+      ],"615 · 雁门之围"),
+      {tag:"extend",tagText:"拓展",title:"雁门之围",yearLine:"615 年",img:"assets/yanmen-siege.png",body:`<p>大业十一年八月，炀帝北巡塞外，东突厥始毕可汗率数十万骑围其于<strong>雁门</strong>。后以募兵、许和等方式得脱。</p><p>三征辽东劳师于东，雁门又被困于北——<strong>对外两线透支</strong>，军力与威信同时见底。</p>`}
+    ],
+    y618:[
+      scene("618，江都。<br/>朝不保夕的再下江南，与落幕。","最后一次南巡后滞留江都。炀帝被部下杀死——37 年王朝画上句号。",[
+        ["再巡","江都","运河终点成终点"],["处境","朝不保夕","控制力崩解"],["结局","618","炀帝被杀 · 隋亡"]
+      ],"618 · 炀帝落幕"),
+      {tag:"cost",tagText:"教材 · 重点",title:"618 年隋亡",yearLine:"618 · 江都",img:"assets/fall-sui.png",body:`<p>在起义军和反隋势力的打击下，隋朝统治濒临崩溃。<strong>618 年</strong>，隋炀帝在<strong>江都</strong>被部下杀死，盛极一时的隋朝随之灭亡。</p><p>从 581 到 618，约 37 年。统一的功业、制度的遗产与大工程的代价，压缩在同一朝的两端。</p>`},
+      {tag:"book",tagText:"教材 · 课后活动",title:"罗隐《炀帝陵》",yearLine:"议一议",body:`<p>「君王忍把平陈业，只换雷塘数亩田。」</p><p>隋炀帝为什么落得如此下场？速亡原因：滥用民力 → 生产破坏、民不聊生 → 起义与官员起事合力。</p>`}
+    ],
+    ySum:[
+      scene("何以暴政速亡，<br/>奇观误国。","统一是起点，制度是遗产，透支是教训。同一套国家能力，可以兴，也可以崩。",[
+        ["遗产","千年","运河 · 科举 · 律令"],["失衡","民力","高动员 · 短反馈"],["镜鉴","秦隋","二世而亡的结构"]
+      ],"总结 · 回答开篇", "想一想：如何评价大运河的功与过？"),
+      {tag:"book",tagText:"课堂收束",title:"一句话主线",yearLine:"总结",body:`<p>隋用制度与工程把分裂的中国重新缝合，并留下运河、科举、律令这些「唐所继承」的遗产；又因把同一套动员能力用到透支，三十余年而亡。</p><p><strong>暴政速亡</strong>：不是没有能力，而是拒绝收缩。<strong>奇观误国</strong>：不是运河本身有罪，而是把通道变成无止境的展示与征发。</p>`},
+      {tag:"extend",tagText:"拓展",title:"秦隋对照",yearLine:"结构比较",body:`<p>皆结束长期分裂、皆大型工程、皆制度创新、皆二世而亡，并为汉唐铺路。</p><p>答题仍须先立足教材材料，再用结构比较提升。</p>`}
+    ],
+    yEnd:[
+      scene("课后讨论<br/>把问题带出教室。","四道题，对应本课三条主线：统一、建设、兴亡。",[
+        ["科举","影响","权力 · 流动 · 素质"],["速亡","原因","民力 · 矛盾 · 起义"],["运河","评价","短期成本 / 长期收益"]
+      ],"结束 · 课后活动", "可打开矩阵版对照检索。"),
+      {tag:"book",tagText:"讨论",title:"课后活动与延伸",yearLine:"讨论",body:`<p>① 科举制度的创立对当时社会产生了什么影响？<br/>② 隋炀帝为何落得如此下场？隋朝速亡的原因是什么？<br/>③ 如何评价大运河的功与过？<br/>④【拓展】同一套国家能力，文帝与炀帝为何结出相反果实？</p><p>配套：<code>sui-lesson1-matrix.html</code>（时间×举措检索）。</p>`}
+    ]
+  };
+
+  /* ========== 地图渲染 ========== */
+  function mapSvgMarkup(){
+    return `
+<svg class="map-svg" id="mapSvg" viewBox="0 0 640 480" role="img" aria-label="隋唐之际形势示意">
+  <rect class="sea" x="0" y="0" width="640" height="480"/>
+  <path class="land" d="M40,80 L120,40 L240,50 L320,40 L420,70 L520,90 L580,140 L600,220 L560,320 L500,400 L400,430 L280,440 L160,400 L80,300 L50,200 Z"/>
+  <!-- regions -->
+  <path id="rg-north" class="region north" d="M80,90 L200,60 L340,70 L400,120 L360,200 L200,210 L100,180 Z"/>
+  <path id="rg-south" class="region south" d="M120,230 L300,220 L420,250 L450,340 L360,400 L200,390 L110,320 Z"/>
+  <path id="rg-west" class="region west" d="M50,160 L120,140 L140,220 L90,250 L40,200 Z"/>
+  <!-- markers -->
+  <g id="mk-daxing" class="marker" transform="translate(150,175)"><circle r="7"/><text x="12" y="4">大兴</text></g>
+  <g id="mk-luoyang" class="marker" transform="translate(230,185)"><circle r="6"/><text x="10" y="4">洛阳</text></g>
+  <g id="mk-zhuo" class="marker" transform="translate(300,100)"><circle r="6"/><text x="10" y="4">涿郡</text></g>
+  <g id="mk-yuhang" class="marker" transform="translate(380,360)"><circle r="6"/><text x="10" y="4">余杭</text></g>
+  <g id="mk-jiangdu" class="marker" transform="translate(340,280)"><circle r="6"/><text x="10" y="4">江都</text></g>
+  <g id="mk-yanmen" class="marker" transform="translate(210,130)"><circle r="6"/><text x="10" y="4">雁门</text></g>
+</svg>`;
+  }
+
+  const ZOOM={
+    north:{x:220,y:140,s:2.0},
+    south:{x:280,y:300,s:2.0},
+    daxing:{x:150,y:175,s:2.4},
+    all:{x:280,y:240,s:1.35},
+    canal:{x:280,y:240,s:1.5}
+  };
+
+  function bindMap(root, yearId){
+    const step=MAP_STEPS[yearId];
+    if(!step) return;
+    const svg=root.querySelector("#mapSvg");
+    const status=root.querySelector("[data-map-status]");
+    const btnRepair=root.querySelector("[data-map-repair]");
+    const btnZoom=root.querySelector("[data-map-zoom]");
+    let repaired=false, zoomed=false;
+    if(status) status.textContent="待修复：先看完整全景";
+    if(btnRepair){
+      btnRepair.addEventListener("click",()=>{
+        repaired=true;
+        btnRepair.disabled=true;
+        btnRepair.textContent="已修复 ✓";
+        if(btnZoom) btnZoom.disabled=false;
+        if(status) status.textContent="已修复全景 · 可放大局部";
+        // paint regions
+        const north=root.querySelector("#rg-north");
+        const south=root.querySelector("#rg-south");
+        if(yearId==="y577"){
+          north.classList.add("zhou");
+        } else if(yearId==="y581"){
+          north.classList.remove("zhou");
+          north.classList.add("sui-fill");
+          root.querySelectorAll("#mk-daxing").forEach(m=>m.classList.add("on"));
+        } else if(yearId==="y583"){
+          north.classList.add("sui-fill");
+          root.querySelectorAll("#mk-daxing,#mk-luoyang").forEach(m=>m.classList.add("on"));
+        } else if(yearId==="y589"){
+          north.classList.add("sui-fill");
+          south.classList.remove("chen");
+          south.classList.add("sui-fill");
+          root.querySelectorAll("#mk-daxing,#mk-luoyang,#mk-yuhang,#mk-jiangdu,#mk-zhuo").forEach(m=>m.classList.add("on"));
+        }
+        // initial chen color before unify
+        if(yearId==="y577"||yearId==="y581"||yearId==="y583"){
+          south.classList.add("chen");
+        }
+      });
+    }
+    if(btnZoom){
+      btnZoom.disabled=true;
+      btnZoom.addEventListener("click",()=>{
+        if(!repaired) return;
+        zoomed=!zoomed;
+        const z=ZOOM[step.focus]||ZOOM.all;
+        if(zoomed){
+          svg.classList.add("zoomed");
+          svg.style.transformOrigin=z.x+"px "+z.y+"px";
+          btnZoom.textContent="还原全景";
+          if(status) status.textContent="局部放大 · 再点还原";
+        }else{
+          svg.classList.remove("zoomed");
+          btnZoom.textContent=step.zoomLabel||"放大局部";
+          if(status) status.textContent="已修复全景 · 可放大局部";
+        }
+      });
+    }
+  }
+
+  function mapMarkup(step){
+    return `
+<article class="map-stage">
+  <div class="map-panel">
+    <header>
+      <div>
+        <p class="tag map" style="margin-bottom:8px">地图 · 先修复再放大</p>
+        <h2>${step.title}</h2>
+      </div>
+      <span class="map-status" data-map-status></span>
+    </header>
+    <div class="map-canvas">
+      <div class="map-view">${mapSvgMarkup()}</div>
+      <div class="map-legend">${(step.legend||[]).map(([c,t])=>`<span><i style="background:${c}"></i>${t}</span>`).join("")}</div>
+    </div>
+    <div class="map-controls">
+      <button type="button" class="btn-pill primary" data-map-repair>${step.actionLabel||"修复染色"}</button>
+      <button type="button" class="btn-pill" data-map-zoom disabled>${step.zoomLabel||"放大局部"}</button>
+    </div>
+  </div>
+  <aside class="map-side">
+    <h3>${step.sideH}</h3>
+    <p>${step.sideP}</p>
+    ${(step.steps||[]).map((s,i)=>`<div class="step"><b>${i+1}</b><span>${s}</span></div>`).join("")}
+    <p class="note" style="margin-top:16px;color:var(--sub);font-size:12px">示意图，非比例。572/612 实拍地图可作对照。</p>
+  </aside>
+</article>`;
+  }
+
+  /* ========== state ========== */
+  let yi=0, ci=0, filtered=[];
+  const el={
+    railTrack:document.getElementById("railTrack"),
+    railFill:document.getElementById("railFill"),
+    yearUp:document.getElementById("yearUp"),
+    yearDown:document.getElementById("yearDown"),
+    slides:document.getElementById("slides"),
+    cardPrev:document.getElementById("cardPrev"),
+    cardNext:document.getElementById("cardNext"),
+    dots:document.getElementById("dots"),
+    kicker:document.getElementById("stageKicker"),
+    count:document.getElementById("stageCount"),
+    hint:document.getElementById("periodHint"),
+    intro:document.getElementById("intro"),
+    startBtn:document.getElementById("startBtn")
+  };
+
+  function buildRail(){
+    YEARS.forEach((y,i)=>{
+      const n=document.createElement("button");
+      n.type="button";n.className="year-node";n.dataset.i=String(i);
+      n.setAttribute("aria-label",y.label+" · "+y.caption);
+      n.innerHTML='<span class="year-dot"></span><span class="year-label">'+y.label+'</span>';
+      n.title=y.label+" · "+y.caption;
+      n.addEventListener("click",()=>goYear(i,true));
       el.railTrack.appendChild(n);
     });
   }
-
-  function railNodes() {
-    return Array.from(el.railTrack.querySelectorAll(".year-node"));
-  }
-
-  function updateRail() {
-    const nodes = railNodes();
-    nodes.forEach((n, i) => {
-      n.classList.toggle("active", i === yi);
-      n.setAttribute("aria-current", i === yi ? "step" : "false");
-      n.classList.toggle("done", i < yi);
+  function railNodes(){return Array.from(el.railTrack.querySelectorAll(".year-node"));}
+  function updateRail(){
+    railNodes().forEach((n,i)=>{
+      n.classList.toggle("active",i===yi);
+      n.classList.toggle("done",i<yi);
+      n.setAttribute("aria-current",i===yi?"step":"false");
     });
-    el.yearUp.disabled = yi <= 0;
-    el.yearDown.disabled = yi >= YEARS.length - 1;
-  }
-
-  /* —— cards —— */
-  function cardsOfYear(i) {
-    const details = CARDS.filter(c => c.year === YEARS[i].id && c.title !== "一句话主线");
-    const extra = window.SUI_EVIDENCE.cards[YEARS[i].id] || [];
-    if (YEARS[i].id === "y605") {
-      const pages = [overview(i)];
-      details.forEach(c => {
-        pages.push(c);
-        if (c.title === "开通大运河") pages.push(extra[0]);
-        if (c.title === "漕运与转漕") pages.push(extra[1], extra[2]);
-        if (c.title === "开创科举取士制度") pages.push(extra[4]);
-      });
-      pages.push(extra[3]);
-      return pages;
+    const nodes=railNodes();
+    if(nodes.length){
+      const first=nodes[0],active=nodes[yi];
+      const h=active.offsetTop+active.offsetHeight*.5-(first.offsetTop+6);
+      el.railFill.style.height=Math.max(0,h)+"px";
     }
-    return [overview(i), ...extra, ...details, ...(i === YEARS.length - 1 ? [RECAP] : [])];
+    el.yearUp.disabled=yi<=0;
+    el.yearDown.disabled=yi>=YEARS.length-1;
   }
+  function pagesOfYear(i){return PAGES[YEARS[i].id]||[];}
 
-  function cardIndexInYear() {
-    const list = cardsOfYear(yi);
-    // ci is index within current year
-    return Math.min(ci, Math.max(0, list.length - 1));
-  }
-
-  function renderSlides() {
-    const list = cardsOfYear(yi);
-    filtered = list;
-    el.slides.style.transition = "none";
-    el.slides.innerHTML = "";
-    list.forEach((c, i) => {
-      const s = document.createElement("section");
-      s.className = "slide";
-      s.dataset.i = String(i);
-      s.style.setProperty("--chapter-year", '"' + YEARS[yi].label + '"');
-      const tagCls = c.tag || "book";
-      const cardCls = "big-card" + (c.img ? (c.wide ? " has-img-wide" : "") : " no-img") + (c.dark ? " dark" : "");
-      s.innerHTML =
-        '<article class="' + cardCls + '">' +
-          (c.img
-            ? '<div class="visual" style="background-image:url(\'' + c.img + '\')"></div>'
-            : '<div class="visual"></div>') +
-          '<div class="content">' +
-            '<span class="tag ' + tagCls + '">' + (c.tagText || "教材") + "</span>" +
-            '<span class="year-chip">' + (c.yearLine || YEARS[yi].caption) + "</span>" +
-            "<h2>" + c.title + "</h2>" +
-            '<div class="body">' + c.body + "</div>" +
-          "</div>" +
-        "</article>";
-      const narrativeTitles = ["杨坚代周建隋", "营建并迁都大兴城", "渡江灭陈，全国一统", "开皇之治：国力迅速恢复", "开通大运河", "开创科举取士制度", "经略流求（台湾）", "三次征辽东", "618 年隋亡"];
-      if (narrativeTitles.includes(c.title)) {
-        s.classList.add("narrative-slide");
-        s.querySelector("article").classList.add("narrative-page");
-      }
-      if (c.scene) {
+  function renderSlides(){
+    const list=pagesOfYear(yi);filtered=list;
+    el.slides.innerHTML="";
+    list.forEach((c,i)=>{
+      const s=document.createElement("section");
+      s.className="slide";s.dataset.i=String(i);
+      if(c.scene){
         s.classList.add("scene-slide");
-        s.innerHTML = sceneMarkup(c);
-      }
-      if (c.evidence) {
-        s.classList.add("evidence-slide");
-        s.innerHTML = window.SUI_EVIDENCE.render(c.evidence);
-      }
-      if (c.img) {
-        const visual = s.querySelector(".visual");
-        visual.setAttribute("role", c.real ? "group" : "img");
-        visual.setAttribute("aria-label", c.caption || c.title + " · AI教学示意");
-        visual.classList.toggle("real-photo", !!c.real);
-        visual.classList.toggle("contain-photo", !!c.contain);
-        const caption = document.createElement("span");
-        caption.className = "image-credit";
-        caption.textContent = c.caption || "AI 教学示意 · 非文物原照";
-        visual.appendChild(caption);
-        if (c.real) {
-          const zoom = document.createElement("button");
-          zoom.type = "button"; zoom.className = "photo-open";
-          zoom.dataset.photoSrc = c.img; zoom.dataset.photoCaption = c.caption;
-          zoom.textContent = "放大观察 ↗";
-          visual.appendChild(zoom);
-        }
+        s.innerHTML='<article class="chapter-scene"><p class="scene-eyebrow">'+c.eyebrow+'</p><h2>'+c.title+'</h2><p class="scene-lead">'+c.lead+'</p><div class="scene-points">'+c.points.map((p,k)=>'<div class="scene-point" style="--order:'+k+'"><span>'+p[0]+'</span><h3>'+p[1]+'</h3><p>'+p[2]+'</p></div>').join("")+'</div><p class="scene-prompt">'+c.prompt+'</p></article>';
+      } else if(c.map){
+        const step=MAP_STEPS[c.yearId];
+        s.innerHTML=mapMarkup(step);
+        bindMap(s,c.yearId);
+      } else {
+        const tagCls=c.tag||"book";
+        const cardCls="big-card"+(c.img?(c.wide?" wide-img":""):" no-img");
+        s.innerHTML='<article class="'+cardCls+'">'+
+          (c.img?'<div class="visual" style="background-image:url(\''+c.img+'\')"></div>':'<div class="visual"></div>')+
+          '<div class="content"><span class="tag '+tagCls+'">'+(c.tagText||"教材")+'</span>'+
+          '<span class="year-chip">'+(c.yearLine||YEARS[yi].caption)+'</span>'+
+          '<h2>'+c.title+'</h2><div class="body">'+c.body+'</div></div></article>';
       }
       el.slides.appendChild(s);
     });
-    window.SUI_EVIDENCE.bind(el.slides, id => goYear(YEARS.findIndex(y => y.id === id)));
-    // dots
-    el.dots.innerHTML = "";
-    list.forEach((_, i) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.setAttribute("aria-label", "第 " + (i + 1) + " 张");
-      b.addEventListener("click", () => goCard(i));
+    el.dots.innerHTML="";
+    list.forEach((_,i)=>{
+      const b=document.createElement("button");b.type="button";
+      b.setAttribute("aria-label","第 "+(i+1)+" 页");
+      b.addEventListener("click",()=>goCard(i));
       el.dots.appendChild(b);
     });
-    ci = 0;
-    applyTransform();
-    void el.slides.offsetWidth;
-    el.slides.style.transition = "";
+    ci=0;applyTransform();
   }
-
-  function applyTransform() {
-    el.slides.style.transform = "translateX(-" + ci * 100 + "%)";
-    const list = filtered.length ? filtered : cardsOfYear(yi);
-    const y = YEARS[yi];
-    el.kicker.textContent = y.label + " · " + y.caption;
-    el.count.textContent = (ci + 1) + " / " + list.length;
-    el.hint.textContent = list[ci].evidence ? "资料探究 · 地图 / 时序 / 证据" : list[ci].scene ? (list[ci].summary ? "全课回顾" : ci === 0 && yi === 0 ? "全课总览" : "阶段概述") : (el.slides.children[ci].classList.contains("narrative-slide") ? "主线讲述 · " : "深入分析 · ") + (list[ci].tagText || "教材");
-    el.cardPrev.disabled = ci <= 0 && yi === 0;
-    el.cardNext.disabled = ci >= list.length - 1 && yi === YEARS.length - 1;
-    Array.from(el.slides.children).forEach((slide, i) => {
-      slide.classList.toggle("is-active", i === ci);
-      slide.inert = i !== ci;
-      slide.setAttribute("aria-hidden", String(i !== ci));
+  function applyTransform(){
+    el.slides.style.transform="translateX(-"+ci*100+"%)";
+    const list=filtered.length?filtered:pagesOfYear(yi);
+    const y=YEARS[yi];
+    el.kicker.textContent=y.label+" · "+y.caption;
+    el.count.textContent=(ci+1)+" / "+list.length;
+    const cur=list[ci]||{};
+    el.hint.textContent=cur.map?"地图 · 先修复再放大":cur.scene?"阶段概述":(cur.tagText||"知识页");
+    el.cardPrev.disabled=ci<=0&&yi===0;
+    el.cardNext.disabled=ci>=list.length-1&&yi===YEARS.length-1;
+    Array.from(el.slides.children).forEach((sl,i)=>{
+      sl.classList.toggle("is-active",i===ci);
+      sl.inert=i!==ci;
+      sl.setAttribute("aria-hidden",String(i!==ci));
     });
-    Array.from(el.dots.children).forEach((d, i) => d.classList.toggle("on", i === ci));
+    Array.from(el.dots.children).forEach((d,i)=>d.classList.toggle("on",i===ci));
     updateRail();
   }
-
-  function goCard(i) {
-    const list = cardsOfYear(yi);
-    ci = Math.max(0, Math.min(list.length - 1, i));
-    applyTransform();
+  function goCard(i){
+    const list=pagesOfYear(yi);
+    ci=Math.max(0,Math.min(list.length-1,i));applyTransform();
+  }
+  function goYear(i,reset){
+    yi=Math.max(0,Math.min(YEARS.length-1,i));
+    if(reset!==false)ci=0;
+    renderSlides();applyTransform();
+    const node=railNodes()[yi];
+    if(node)node.scrollIntoView({block:"nearest",behavior:"smooth"});
+  }
+  function nextCard(){
+    const list=pagesOfYear(yi);
+    if(ci<list.length-1)goCard(ci+1);
+    else if(yi<YEARS.length-1)goYear(yi+1);
+  }
+  function prevCard(){
+    if(ci>0)goCard(ci-1);
+    else if(yi>0){goYear(yi-1);const list=pagesOfYear(yi);goCard(list.length-1);}
   }
 
-  function goYear(i, resetCard) {
-    yi = Math.max(0, Math.min(YEARS.length - 1, i));
-    if (resetCard !== false) ci = 0;
-    renderSlides();
-    applyTransform();
-    // scroll rail node into view
-    const node = railNodes()[yi];
-    if (node) node.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  }
+  el.cardNext.addEventListener("click",nextCard);
+  el.cardPrev.addEventListener("click",prevCard);
+  el.yearDown.addEventListener("click",()=>{if(yi<YEARS.length-1)goYear(yi+1);});
+  el.yearUp.addEventListener("click",()=>{if(yi>0)goYear(yi-1);});
 
-  function nextCard() {
-    const list = cardsOfYear(yi);
-    if (ci < list.length - 1) goCard(ci + 1);
-    else if (yi < YEARS.length - 1) goYear(yi + 1);
-  }
-  function prevCard() {
-    if (ci > 0) goCard(ci - 1);
-    else if (yi > 0) {
-      goYear(yi - 1);
-      const list = cardsOfYear(yi);
-      goCard(list.length - 1);
-    }
-  }
-  function nextYear() { if (yi < YEARS.length - 1) goYear(yi + 1); }
-  function prevYear() { if (yi > 0) goYear(yi - 1); }
+  const deck=document.querySelector(".deck");
+  let tx=0,ty=0;
+  deck.addEventListener("touchstart",e=>{tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY;},{passive:true});
+  deck.addEventListener("touchend",e=>{
+    const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){if(dx<0)nextCard();else prevCard();}
+  },{passive:true});
 
-  /* —— events —— */
-  el.cardNext.addEventListener("click", nextCard);
-  el.cardPrev.addEventListener("click", prevCard);
-  el.yearDown.addEventListener("click", nextYear);
-  el.yearUp.addEventListener("click", prevYear);
-
-  // swipe on deck
-  const deck = document.querySelector(".deck");
-  let tx = 0, ty = 0;
-  deck.addEventListener("touchstart", (e) => {
-    tx = e.changedTouches[0].clientX;
-    ty = e.changedTouches[0].clientY;
-  }, { passive: true });
-  deck.addEventListener("touchend", (e) => {
-    const dx = e.changedTouches[0].clientX - tx;
-    const dy = e.changedTouches[0].clientY - ty;
-    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) nextCard(); else prevCard();
-    }
-  }, { passive: true });
-
-  document.addEventListener("keydown", (e) => {
-    if (document.getElementById("photoViewer")?.open) return;
-    if (el.intro && !el.intro.classList.contains("hide")) {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); start(); }
+  document.addEventListener("keydown",e=>{
+    if(el.intro&&!el.intro.classList.contains("hide")){
+      if(e.key==="Enter"||e.key===" "){e.preventDefault();start();}
       return;
     }
-    if (e.target && /input|textarea|select/i.test(e.target.tagName)) return;
-    if (e.key === "ArrowRight") { e.preventDefault(); nextCard(); }
-    else if (e.key === "ArrowLeft") { e.preventDefault(); prevCard(); }
-    else if (e.key === "ArrowDown") { e.preventDefault(); nextYear(); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); prevYear(); }
-    else if (e.key >= "1" && e.key <= "9") {
-      const i = parseInt(e.key, 10) - 1;
-      if (i < YEARS.length) { e.preventDefault(); goYear(i); }
-    } else if (e.key === "0") {
-      e.preventDefault(); goYear(YEARS.length - 1); // 618 末年
-    }
+    if(e.target&&/input|textarea|select/i.test(e.target.tagName))return;
+    if(e.key==="ArrowRight"){e.preventDefault();nextCard();}
+    else if(e.key==="ArrowLeft"){e.preventDefault();prevCard();}
+    else if(e.key==="ArrowDown"){e.preventDefault();if(yi<YEARS.length-1)goYear(yi+1);}
+    else if(e.key==="ArrowUp"){e.preventDefault();if(yi>0)goYear(yi-1);}
+    else if(e.key>="1"&&e.key<="9"){const i=parseInt(e.key,10)-1;if(i<YEARS.length){e.preventDefault();goYear(i);}}
+    else if(e.key==="0"){e.preventDefault();goYear(YEARS.length-1);}
   });
 
-  function start() {
-    el.intro.classList.add("hide");
-    el.intro.inert = true;
-    document.querySelector(".rail").inert = false;
-    document.querySelectorAll(".stage-top,.deck,.stage-bottom").forEach(n => n.inert = false);
-    document.getElementById("homeBtn").focus();
-    goYear(0);
-  }
-  el.startBtn.addEventListener("click", start);
+  function start(){el.intro.classList.add("hide");goYear(0);}
+  el.startBtn.addEventListener("click",start);
 
-  document.getElementById("homeBtn").addEventListener("click", () => {
-    el.intro.inert = false;
-    el.intro.classList.remove("hide");
-    document.querySelector(".rail").inert = true;
-    document.querySelectorAll(".stage-top,.deck,.stage-bottom").forEach(n => n.inert = true);
-    el.startBtn.focus();
-  });
-  const fullButton = document.getElementById("fullscreenBtn");
-  if (!document.fullscreenEnabled) fullButton.hidden = true;
-  fullButton.addEventListener("click", async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await document.documentElement.requestFullscreen();
-    } catch (_) { fullButton.textContent = "请使用浏览器全屏"; }
-  });
-  document.addEventListener("fullscreenchange", () => {
-    fullButton.textContent = document.fullscreenElement ? "退出全屏 ↙" : "全屏 ↗";
-  });
-  document.querySelector(".rail").inert = true;
-  document.querySelectorAll(".stage-top,.deck,.stage-bottom").forEach(n => n.inert = true);
-  /* —— init —— */
   buildRail();
   goYear(0);
 })();
