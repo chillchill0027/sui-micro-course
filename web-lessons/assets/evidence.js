@@ -73,6 +73,15 @@ window.SUI_EVIDENCE = (() => {
       viewer.showModal();
     }));
     root.querySelectorAll('[data-year-jump]').forEach(b => b.addEventListener('click', () => jump(b.dataset.yearJump)));
+    root.querySelectorAll('[data-original]').forEach(b => b.addEventListener('click', () => {
+      const page = b.closest('.map-original');
+      if (!page) return;
+      const img = page.querySelector('.original-map');
+      if (!img) return;
+      img.src = b.dataset.original;
+      img.alt = b.textContent.trim() + ' · 完整历史地图原图';
+      page.querySelectorAll('[data-original]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    }));
     root.querySelectorAll('.reveal-btn').forEach(b => b.addEventListener('click', () => {
       const answer = b.nextElementSibling, open = b.getAttribute('aria-expanded') !== 'true';
       b.setAttribute('aria-expanded', String(open)); answer.hidden = !open;
@@ -98,30 +107,49 @@ window.SUI_EVIDENCE = (() => {
 
   function unifyMapAccurate(stepKey) {
     const steps = {
-      '577': {title:'577 · 北周吞并北齐', note:'原北齐疆域沿国界转为北周色；北方完成统一，长江以南仍属陈。', cls:'north'},
-      '581': {title:'581 · 隋文帝建立隋朝', note:'北方疆域保持一体，政权由北周改为隋；南方陈朝仍与之对峙。', cls:'sui-north'},
-      '583': {title:'583 · 迁都大兴城', note:'国界格局未变；大兴城成为新的政治中心，洛阳连接关东与江淮。', cls:'capital'},
-      '589': {title:'589 · 渡江灭陈，统一全国', note:'陈朝疆域沿国界转为隋色，南北政权界线消失，统一版图形成。', cls:'all'}
+      '577': {
+        title: '577 · 北周吞并北齐',
+        note: '直接展示原图：原北齐疆域并入北周，北方完成统一；长江以南仍属陈。',
+        img: 'assets/unify-577.png',
+        alt: '577年原图：北周吞并北齐后的北方版图，南方仍为陈朝'
+      },
+      '581': {
+        title: '581 · 隋文帝建立隋朝',
+        note: '直接展示原图：北方版图不变，政权由北周改为隋；南方陈朝仍与之对峙。',
+        img: 'assets/unify-581.png',
+        alt: '581年原图：隋代周后的南北对峙版图'
+      },
+      '583': {
+        title: '583 · 迁都大兴城',
+        note: '直接展示原图：疆域格局未变；政治中心在大兴（长安），洛阳连接关东与江淮。',
+        img: 'assets/unify-581.png',
+        alt: '583年前后原图：隋与陈对峙，都城在关中大兴'
+      },
+      '589': {
+        title: '589 · 渡江灭陈，统一全国',
+        note: '直接展示原图：陈朝并入隋，南北政权界线消失，统一版图形成。',
+        img: 'assets/unify-589.png',
+        alt: '589年原图：隋统一全国后的版图'
+      }
     };
     const step = steps[stepKey] || steps['577'];
-    return `<article class="map-film ${step.cls}">
-      <div class="map-film-title"><p>${stepKey} 年</p><h2>${step.title}</h2><span>${step.note}</span></div>
-      <div class="map-film-stage"><img src="assets/map-divided-572.jpg" alt="572 年北周、北齐、陈政权分布底图，叠加国界内的疆域变化" />
-        <svg viewBox="0 0 2890 2043" aria-hidden="true">
-          <path class="territory north-zhou" d="M0 155 L150 250 L310 355 L470 500 L620 535 L780 455 L890 350 L930 250 L1160 120 L1390 95 L1600 145 L1790 125 L2050 105 L2285 55 L2320 285 L2295 455 L2230 565 L2110 630 L1980 575 L1880 600 L1795 660 L1710 735 L1685 790 L1560 805 L1430 835 L1310 810 L1160 790 L1010 780 L900 820 L790 865 L655 830 L535 900 L410 875 L280 835 L145 760 L35 780 L0 705 Z"/>
-          <path class="territory north-qi" d="M1800 650 L1870 605 L1945 585 L2010 565 L2070 610 L2110 645 L2160 650 L2150 705 L2215 735 L2170 785 L2130 805 L2145 855 L2125 900 L2150 955 L2180 995 L2140 1040 L2140 1080 L2090 1120 L2040 1110 L1990 1095 L1950 1125 L1900 1110 L1860 1135 L1820 1095 L1775 1070 L1740 1030 L1700 1005 L1715 970 L1680 935 L1700 895 L1680 855 L1695 815 L1660 790 L1715 755 L1740 715 L1780 700 Z"/>
-          <path class="territory chen" d="M1430 835 L1560 805 L1685 790 L1660 825 L1695 855 L1680 900 L1715 970 L1740 1030 L1780 1070 L1820 1100 L1860 1135 L1910 1110 L1960 1130 L2010 1105 L2080 1120 L2140 1080 L2180 1110 L2200 1180 L2225 1260 L2260 1340 L2230 1430 L2170 1510 L2110 1580 L2050 1660 L1980 1740 L1880 1785 L1780 1760 L1680 1720 L1580 1660 L1500 1580 L1430 1510 L1360 1430 L1310 1340 L1260 1260 L1240 1170 L1280 1090 L1330 1030 L1360 950 L1320 900 Z"/>
-          <path class="territory sui-all" d="M0 155 L150 250 L310 355 L470 500 L620 535 L780 455 L890 350 L930 250 L1160 120 L1390 95 L1600 145 L1790 125 L2050 105 L2285 55 L2320 285 L2295 455 L2230 565 L2110 630 L2160 650 L2150 705 L2215 735 L2170 785 L2130 805 L2145 855 L2125 900 L2150 955 L2180 995 L2140 1040 L2180 1110 L2200 1180 L2225 1260 L2260 1340 L2230 1430 L2170 1510 L2110 1580 L2050 1660 L1980 1740 L1880 1785 L1780 1760 L1680 1720 L1580 1660 L1500 1580 L1430 1510 L1360 1430 L1310 1340 L1260 1260 L1240 1170 L1280 1090 L1330 1030 L1360 950 L1320 900 L1430 835 L1310 810 L1160 790 L1010 780 L900 820 L790 865 L655 830 L535 900 L410 875 L280 835 L145 760 L35 780 L0 705 Z"/>
-          <g class="state-label label-zhou"><text x="1180" y="555">北周</text></g>
-          <g class="state-label label-qi"><text x="1880" y="900">北齐</text></g>
-          <g class="state-label label-chen"><text x="1730" y="1390">陈</text></g>
-          <g class="state-label label-sui"><text x="1450" y="720">隋</text></g>
-          <g class="capital-pin daxing"><circle cx="1515" cy="1020" r="20"/><text x="1555" y="1012">大兴城</text><text x="1555" y="1052">583</text></g>
-          <g class="capital-pin luoyang"><circle cx="1740" cy="1090" r="16"/><text x="1775" y="1087">洛阳</text></g>
-          <path class="river-arrow" d="M1770 1030 C1880 1090 2000 1130 2130 1190"/>
-        </svg>
+    return `<article class="map-film map-original">
+      <div class="map-film-title">
+        <p>${stepKey} 年</p>
+        <h2>${step.title}</h2>
+        <span>${step.note}</span>
       </div>
-      <div class="map-film-caption"><span class="map-key">疆域变化</span><p>${step.note}</p></div>
+      <div class="map-film-stage">
+        <img class="original-map" src="${step.img}" alt="${step.alt}" />
+      </div>
+      <div class="map-film-caption">
+        <span class="map-key">原图</span>
+        <p>完整历史地图原图（含图例与今地名对照）。对照底图：572 年分裂局面 / 612 年隋朝形势。</p>
+      </div>
+      <div class="map-original-switch" role="group" aria-label="切换原始地图">
+        <button type="button" data-original="assets/map-divided-572.jpg">572 分裂原图</button>
+        <button type="button" data-original="assets/map-sui-612.jpg">612 隋朝原图</button>
+      </div>
     </article>`;
   }
 
